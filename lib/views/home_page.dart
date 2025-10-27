@@ -1,0 +1,142 @@
+import 'package:farmanullah/models/portfolio_model.dart';
+import 'package:farmanullah/widgets/about_section.dart';
+import 'package:farmanullah/widgets/contact_section.dart';
+import 'package:farmanullah/widgets/home_section.dart';
+import 'package:farmanullah/widgets/nav_bar.dart';
+import 'package:farmanullah/widgets/portfolio_section.dart';
+import 'package:farmanullah/widgets/services_section.dart';
+import 'package:farmanullah/widgets/skills_section.dart';
+import 'package:farmanullah/widgets/sticky_navbar_delegate.dart';
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  final PortfolioData _portfolioData = PortfolioData.getData();
+  String _currentSection = 'home';
+
+  // GlobalKeys for each section to enable scroll-to functionality
+  final GlobalKey _homeKey = GlobalKey();
+  final GlobalKey _aboutKey = GlobalKey();
+  final GlobalKey _servicesKey = GlobalKey();
+  final GlobalKey _skillsKey = GlobalKey();
+  final GlobalKey _portfolioKey = GlobalKey();
+  final GlobalKey _contactKey = GlobalKey();
+
+  void _scrollToSection(GlobalKey key, String section) async {
+    setState(() {
+      _currentSection = section;
+    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        alignment: 0.1, // Scroll to slightly below the nav bar
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_updateCurrentSection);
+  }
+
+  void _updateCurrentSection() {
+    // Simple logic to update current section based on scroll position
+    // This is a basic implementation - can be enhanced with IntersectionObserver-like logic
+    if (_scrollController.hasClients) {
+      final offset = _scrollController.offset;
+      // Update based on approximate positions
+      if (offset < 300) {
+        if (_currentSection != 'home') {
+          setState(() {
+            _currentSection = 'home';
+          });
+        }
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          // Sticky Navigation Bar
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: StickyNavBarDelegate(
+              child: NavBar(
+                key: ValueKey(_currentSection),
+                currentSection: _currentSection,
+                onHome: () => _scrollToSection(_homeKey, 'home'),
+                onAbout: () => _scrollToSection(_aboutKey, 'about'),
+                onServices: () => _scrollToSection(_servicesKey, 'services'),
+                onPortfolio: () => _scrollToSection(_portfolioKey, 'portfolio'),
+                onContact: () => _scrollToSection(_contactKey, 'contact'),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            key: _homeKey,
+            child: HomeSection(data: _portfolioData),
+          ),
+          SliverToBoxAdapter(
+            key: _aboutKey,
+            child: AboutSection(data: _portfolioData),
+          ),
+          SliverToBoxAdapter(key: _servicesKey, child: ServicesSection()),
+          SliverToBoxAdapter(
+            key: _skillsKey,
+            child: SkillsSection(skills: _portfolioData.skills),
+          ),
+          SliverToBoxAdapter(
+            key: _portfolioKey,
+            child: PortfolioSection(projects: _portfolioData.projects),
+          ),
+          SliverToBoxAdapter(
+            key: _contactKey,
+            child: ContactSection(
+              email: _portfolioData.email,
+              phone: _portfolioData.phone,
+              linkedIn: _portfolioData.linkedIn,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.all(32),
+              color: Theme.of(context).cardColor.withOpacity(0.3),
+              child: Center(
+                child: Text(
+                  '© 2024 Farman Ullah. All rights reserved.',
+                  style: TextStyle(
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color?.withOpacity(0.6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
