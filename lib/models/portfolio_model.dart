@@ -152,6 +152,31 @@ class PortfolioData {
       ],
       projects: [
         Project(
+          name: 'Artnie – Creative Design App',
+          description:
+              'A cross-platform mobile app for creating and customizing digital artwork, including invitations, posters, cards, and social media visuals. Features Google Sign-In, offline design capabilities, Firebase-backed cloud storage for optional backups, and a privacy-focused approach with user-controlled data deletion. Built with a sleek Material 3 UI and smooth animations for an engaging user experience.',
+          technologies: [
+            'Flutter',
+            'Firebase Authentication',
+            'Firebase Cloud Storage',
+            'GetX',
+            'Material 3',
+            'Custom Animations',
+            'Google Sign-In',
+            'Offline Storage',
+            'REST API',
+          ],
+          images: [
+            'assets/images/projects/artnie_1.png',
+            'assets/images/projects/artnie_2.png',
+            'assets/images/projects/artnie_3.png',
+            'assets/images/projects/artnie_4.png',
+            'assets/images/projects/artnie_5.png',
+          ],
+          playStoreUrl:
+              'https://play.google.com/store/apps/details?id=com.Artnie.app&pcampaignid=web_share', // Update with actual URL if different
+        ),
+        Project(
           name: 'BitNasdaq (crypto currency exchange)',
           description:
               'A cryptocurrency exchange platform offering wallet management, P2P transfers, spot trading, VIP rewards, trading bots, KYC verification, and real-time market data with charting. Supports blockchain interaction and token operations.',
@@ -177,31 +202,6 @@ class PortfolioData {
               "https://play.google.com/store/apps/details?id=com.bitnasdaq.exchange&pcampaignid=web_share",
         ),
 
-        Project(
-          name: 'Artnie – Creative Design App',
-          description:
-              'A cross-platform mobile app for creating and customizing digital artwork, including invitations, posters, cards, and social media visuals. Features Google Sign-In, offline design capabilities, Firebase-backed cloud storage for optional backups, and a privacy-focused approach with user-controlled data deletion. Built with a sleek Material 3 UI and smooth animations for an engaging user experience.',
-          technologies: [
-            'Flutter',
-            'Firebase Authentication',
-            'Firebase Cloud Storage',
-            'GetX',
-            'Material 3',
-            'Custom Animations',
-            'Google Sign-In',
-            'Offline Storage',
-            'REST API',
-          ],
-          images: [
-            'assets/images/projects/artnie_1.png',
-            'assets/images/projects/artnie_2.png',
-            'assets/images/projects/artnie_3.png',
-            'assets/images/projects/artnie_4.png',
-            'assets/images/projects/artnie_5.png',
-          ],
-          playStoreUrl:
-              'https://play.google.com/store/apps/details?id=com.Artnie.app&pcampaignid=web_share', // Update with actual URL if different
-        ),
         Project(
           name: 'Cricket Management App',
           description:
@@ -269,51 +269,6 @@ class PortfolioData {
             'assets/images/projects/quotes_4.png',
           ],
         ),
-        Project(
-          name: 'VertexStairs – App',
-          description:
-              'A custom mobile solution built for a private business, supporting localized operations, data handling, and internal process automation.',
-          technologies: [
-            'Flutter',
-            'MSSQL Server',
-            'Azure Data Studio',
-            'REST API',
-            'Riverpod',
-            'Clean Architecture',
-          ],
-          images: ['assets/images/projects/vertex_1.png'],
-        ),
-        Project(
-          name: 'Imagin Card',
-          description:
-              'A Flutter-based mobile app for creating personalized digital cards for events like birthdays and weddings, featuring a drag-and-drop interface for managing text, images, and shapes.',
-          technologies: ['Flutter', 'Riverpod', 'Firebase', 'Custom UI'],
-          images: [
-            'assets/images/projects/imagin_1.png',
-            'assets/images/projects/imagin_2.png',
-          ],
-        ),
-        Project(
-          name: 'OurWallet – Wallet App',
-          description:
-              'A mobile wallet app for managing, sending, receiving, and tracking multiple cryptocurrencies with real-time balance updates and secure transactions. Includes features for token management, transaction history, and market tracking.',
-          technologies: [
-            'Flutter',
-            'Blockchain',
-            'Web3',
-            'Ethereum',
-            'ERC-20',
-            'MetaMask',
-            'REST API',
-            'Riverpod',
-          ],
-          images: [
-            'assets/images/projects/wallet_1.png',
-            'assets/images/projects/wallet_2.png',
-            'assets/images/projects/wallet_3.png',
-          ],
-          playStoreUrl: null,
-        ),
 
         Project(
           name: 'Crypto Wallet',
@@ -347,6 +302,42 @@ class PortfolioData {
             'Clean Architecture',
           ],
           images: ['assets/images/projects/nft_1.png'],
+        ),
+
+        Project(
+          name: 'OurWallet – Wallet App',
+          description:
+              'A mobile wallet app for managing, sending, receiving, and tracking multiple cryptocurrencies with real-time balance updates and secure transactions. Includes features for token management, transaction history, and market tracking.',
+          technologies: [
+            'Flutter',
+            'Blockchain',
+            'Web3',
+            'Ethereum',
+            'ERC-20',
+            'MetaMask',
+            'REST API',
+            'Riverpod',
+          ],
+          images: [
+            'assets/images/projects/wallet_1.png',
+            'assets/images/projects/wallet_2.png',
+            'assets/images/projects/wallet_3.png',
+          ],
+          playStoreUrl: null,
+        ),
+        Project(
+          name: 'VertexStairs – App',
+          description:
+              'A custom mobile solution built for a private business, supporting localized operations, data handling, and internal process automation.',
+          technologies: [
+            'Flutter',
+            'MSSQL Server',
+            'Azure Data Studio',
+            'REST API',
+            'Riverpod',
+            'Clean Architecture',
+          ],
+          images: ['assets/images/projects/vertex_1.png'],
         ),
       ],
     );

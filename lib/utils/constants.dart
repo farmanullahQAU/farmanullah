@@ -21,6 +21,7 @@ class AppConstants {
   // Section IDs
   static const String home = 'home';
   static const String about = 'about';
+  static const String experience = 'experience';
   static const String services = 'services';
   static const String portfolio = 'portfolio';
   static const String contact = 'contact';

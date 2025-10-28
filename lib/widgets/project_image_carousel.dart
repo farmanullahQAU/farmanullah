@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProjectImageCarousel extends StatefulWidget {
   final List<String> images;
@@ -190,7 +191,9 @@ class _CarouselModalState extends State<_CarouselModal> {
               right: 20,
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.white, size: 28),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Get.back();
+                },
               ),
             ),
 

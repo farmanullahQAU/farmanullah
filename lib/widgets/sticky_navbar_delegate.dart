@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 class StickyNavBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
+  final double height;
 
-  StickyNavBarDelegate({required this.child});
-
-  @override
-  double get minExtent => 70;
+  StickyNavBarDelegate({required this.child, this.height = 64});
 
   @override
-  double get maxExtent => 70;
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
 
   @override
   Widget build(
@@ -17,15 +18,28 @@ class StickyNavBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: child,
+    return SizedBox(
+      height: height,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: shrinkOffset > 0
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context).shadowColor.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+        child: child,
+      ),
     );
   }
 
   @override
   bool shouldRebuild(StickyNavBarDelegate oldDelegate) {
-    // Force rebuild - the child widget handles state changes
-    return child != oldDelegate.child;
+    return child != oldDelegate.child || height != oldDelegate.height;
   }
 }

@@ -1,9 +1,10 @@
 import 'package:farmanullah/models/portfolio_model.dart';
-import 'package:farmanullah/widgets/about_section.dart';
 import 'package:farmanullah/widgets/contact_section.dart';
+import 'package:farmanullah/widgets/experience_section.dart';
 import 'package:farmanullah/widgets/home_section.dart';
 import 'package:farmanullah/widgets/nav_bar.dart';
 import 'package:farmanullah/widgets/portfolio_section.dart';
+import 'package:farmanullah/widgets/section_divider.dart';
 import 'package:farmanullah/widgets/services_section.dart';
 import 'package:farmanullah/widgets/skills_section.dart';
 import 'package:farmanullah/widgets/sticky_navbar_delegate.dart';
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   // GlobalKeys for each section to enable scroll-to functionality
   final GlobalKey _homeKey = GlobalKey();
-  final GlobalKey _aboutKey = GlobalKey();
+  final GlobalKey _experienceKey = GlobalKey();
   final GlobalKey _servicesKey = GlobalKey();
   final GlobalKey _skillsKey = GlobalKey();
   final GlobalKey _portfolioKey = GlobalKey();
@@ -33,14 +34,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentSection = section;
     });
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 150));
+    if (!mounted) return;
     final context = key.currentContext;
     if (context != null) {
       Scrollable.ensureVisible(
         context,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOut,
-        alignment: 0.1, // Scroll to slightly below the nav bar
+        alignment: 0.0, // Scroll to top of the section
       );
     }
   }
@@ -75,6 +77,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 768;
+    final isTablet = screenWidth > 600 && !isDesktop;
+
+    // Calculate responsive navbar height based on content
+    // Adjusted to match actual navbar content height
+    final navbarHeight = isDesktop
+        ? 64.0
+        : isTablet
+        ? 60.0
+        : 58.0;
+
     return Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
@@ -83,11 +97,13 @@ class _HomePageState extends State<HomePage> {
           SliverPersistentHeader(
             pinned: true,
             delegate: StickyNavBarDelegate(
+              height: navbarHeight,
               child: NavBar(
                 key: ValueKey(_currentSection),
                 currentSection: _currentSection,
                 onHome: () => _scrollToSection(_homeKey, 'home'),
-                onAbout: () => _scrollToSection(_aboutKey, 'about'),
+                onExperience: () =>
+                    _scrollToSection(_experienceKey, 'experience'),
                 onServices: () => _scrollToSection(_servicesKey, 'services'),
                 onPortfolio: () => _scrollToSection(_portfolioKey, 'portfolio'),
                 onContact: () => _scrollToSection(_contactKey, 'contact'),
@@ -98,19 +114,24 @@ class _HomePageState extends State<HomePage> {
             key: _homeKey,
             child: HomeSection(data: _portfolioData),
           ),
+          const SliverToBoxAdapter(child: SectionDivider()),
           SliverToBoxAdapter(
-            key: _aboutKey,
-            child: AboutSection(data: _portfolioData),
+            key: _experienceKey,
+            child: ExperienceSection(experiences: _portfolioData.experiences),
           ),
+          const SliverToBoxAdapter(child: SectionDivider()),
           SliverToBoxAdapter(key: _servicesKey, child: ServicesSection()),
+          const SliverToBoxAdapter(child: SectionDivider()),
           SliverToBoxAdapter(
             key: _skillsKey,
             child: SkillsSection(skills: _portfolioData.skills),
           ),
+          const SliverToBoxAdapter(child: SectionDivider()),
           SliverToBoxAdapter(
             key: _portfolioKey,
             child: PortfolioSection(projects: _portfolioData.projects),
           ),
+          const SliverToBoxAdapter(child: SectionDivider()),
           SliverToBoxAdapter(
             key: _contactKey,
             child: ContactSection(
