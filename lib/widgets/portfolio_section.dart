@@ -21,7 +21,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(viewportFraction: 0.8);
+    _pageController = PageController(viewportFraction: 1);
     _pageController.addListener(_pageListener);
   }
 
@@ -42,8 +42,13 @@ class _PortfolioSectionState extends State<PortfolioSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 768;
+
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 32),
+      padding: EdgeInsets.symmetric(
+        vertical: isDesktop ? 32 : 24,
+        horizontal: isDesktop ? 0 : 16,
+      ),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
@@ -54,7 +59,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: isDesktop ? 24 : 8),
                 child: Row(
                   children: [
                     Container(
@@ -71,10 +76,10 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Text(
+                    Text(
                       'Portfolio',
                       style: TextStyle(
-                        fontSize: 42,
+                        fontSize: isDesktop ? 42 : 32,
                         fontWeight: FontWeight.w900,
                         letterSpacing: -0.5,
                       ),
@@ -82,11 +87,15 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                   ],
                 ),
               ),
-              const SizedBox(height: 48),
+              SizedBox(height: isDesktop ? 48 : 32),
               Stack(
+                clipBehavior: Clip.none,
+
                 children: [
                   SizedBox(
-                    height: 680,
+                    height: isDesktop
+                        ? 680
+                        : (MediaQuery.of(context).size.height * 0.65),
                     child: PageView.builder(
                       controller: _pageController,
                       physics: const ClampingScrollPhysics(),
@@ -94,10 +103,13 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                       itemBuilder: (context, index) {
                         return RepaintBoundary(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isDesktop ? 12 : 8,
+                            ),
                             child: _buildProjectCard(
                               context,
                               widget.projects[index],
+                              isDesktop,
                             ),
                           ),
                         );
@@ -105,85 +117,96 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                     ),
                   ),
                   // Left Navigation Button
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: _currentPage > 0
-                          ? Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    context.theme.colorScheme.primaryContainer,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 8,
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.chevron_left,
-                                  color: AppConstants.primaryColor,
-                                  size: 32,
+                  if (isDesktop)
+                    Positioned(
+                      left: -20,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: _currentPage > 0
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: context
+                                      .theme
+                                      .colorScheme
+                                      .primaryContainer,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
                                 ),
-                                onPressed: () {
-                                  _pageController.previousPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                iconSize: 32,
-                                padding: const EdgeInsets.all(12),
-                              ),
-                            )
-                          : const SizedBox(),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.chevron_left,
+                                    color: AppConstants.primaryColor,
+                                    size: 32,
+                                  ),
+                                  onPressed: () {
+                                    _pageController.previousPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                  iconSize: 32,
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ),
                     ),
-                  ),
                   // Right Navigation Button
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: _currentPage < widget.projects.length - 1
-                          ? Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 8,
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.chevron_right,
-                                  color: AppConstants.primaryColor,
-                                  size: 32,
+                  if (isDesktop)
+                    Positioned(
+                      right: -20,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: _currentPage < widget.projects.length - 1
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: context
+                                      .theme
+                                      .colorScheme
+                                      .primaryContainer,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
                                 ),
-                                onPressed: () {
-                                  _pageController.nextPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                iconSize: 32,
-                                padding: const EdgeInsets.all(12),
-                              ),
-                            )
-                          : const SizedBox(),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.chevron_right,
+                                    color: AppConstants.primaryColor,
+                                    size: 32,
+                                  ),
+                                  onPressed: () {
+                                    _pageController.nextPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                  iconSize: 32,
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ),
                     ),
-                  ),
                 ],
               ),
               // Navigation Dots
               Padding(
-                padding: const EdgeInsets.only(top: 32, bottom: 16),
+                padding: EdgeInsets.only(top: isDesktop ? 32 : 24, bottom: 16),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -221,7 +244,11 @@ class _PortfolioSectionState extends State<PortfolioSection> {
     );
   }
 
-  Widget _buildProjectCard(BuildContext context, Project project) {
+  Widget _buildProjectCard(
+    BuildContext context,
+    Project project,
+    bool isDesktop,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -244,26 +271,26 @@ class _PortfolioSectionState extends State<PortfolioSection> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(isDesktop ? 24 : 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   project.name,
-                  style: const TextStyle(
-                    fontSize: 20,
+                  style: TextStyle(
+                    fontSize: isDesktop ? 20 : 18,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: isDesktop ? 12 : 8),
                 Text(
                   project.description,
-                  maxLines: 3,
+                  maxLines: isDesktop ? 3 : 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: isDesktop ? 14 : 13,
                     height: 1.4,
                     color: Theme.of(
                       context,
@@ -271,15 +298,15 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                   ),
                 ),
                 if (project.technologies.isNotEmpty) ...[
-                  const SizedBox(height: 16),
+                  SizedBox(height: isDesktop ? 16 : 12),
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
                     children: project.technologies.take(5).map((tech) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isDesktop ? 10 : 8,
+                          vertical: isDesktop ? 5 : 4,
                         ),
                         decoration: BoxDecoration(
                           color: AppConstants.primaryColor.withOpacity(0.1),
@@ -287,8 +314,8 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                         ),
                         child: Text(
                           tech,
-                          style: const TextStyle(
-                            fontSize: 11,
+                          style: TextStyle(
+                            fontSize: isDesktop ? 11 : 10,
                             color: AppConstants.primaryColor,
                             fontWeight: FontWeight.w600,
                           ),
@@ -299,7 +326,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                 ],
                 // Store Badges
                 if (project.playStoreUrl != null) ...[
-                  const SizedBox(height: 16),
+                  SizedBox(height: isDesktop ? 16 : 12),
                   StoreBadges(playStoreUrl: project.playStoreUrl),
                 ],
               ],

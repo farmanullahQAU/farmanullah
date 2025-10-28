@@ -27,16 +27,12 @@ class AboutSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
-    final isTablet = MediaQuery.of(context).size.width > 600 && !isDesktop;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop
-            ? 64
-            : isTablet
-            ? 40
-            : 24,
+        horizontal: isDesktop ? 64 : (screenWidth > 400 ? 24 : 16),
         vertical: isDesktop ? 120 : 80,
       ),
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -48,7 +44,7 @@ class AboutSection extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: _buildSectionHeader('About Me')),
+                  Expanded(child: _buildSectionHeader(context, 'About Me')),
                   // CV Download Button
                   if (isDesktop)
                     ElevatedButton.icon(
@@ -186,14 +182,14 @@ class AboutSection extends StatelessWidget {
               const SizedBox(height: 100),
 
               // Education Section
-              _buildSectionHeader('Education'),
+              _buildSectionHeader(context, 'Education'),
               const SizedBox(height: 40),
               _buildEducationCard(context),
 
               const SizedBox(height: 100),
 
               // Experience Section
-              _buildSectionHeader('Professional Experience'),
+              _buildSectionHeader(context, 'Professional Experience'),
               const SizedBox(height: 40),
 
               ...List.generate(
@@ -213,14 +209,17 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final isDesktop = MediaQuery.of(context).size.width > 768;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 48,
+          style: TextStyle(
+            fontSize: isDesktop ? 48 : (screenWidth > 400 ? 36 : 32),
             fontWeight: FontWeight.w900,
             letterSpacing: -0.5,
           ),

@@ -10,11 +10,12 @@ class ExperienceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 64 : 40,
+        horizontal: isDesktop ? 64 : (screenWidth > 400 ? 24 : 16),
         vertical: isDesktop ? 100 : 80,
       ),
       decoration: BoxDecoration(
@@ -22,15 +23,16 @@ class ExperienceSection extends StatelessWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1400),
+          constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Title Section
               Row(
                 children: [
                   Container(
                     width: 4,
-                    height: isDesktop ? 40 : 32,
+                    height: isDesktop ? 50 : 40,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -42,67 +44,100 @@ class ExperienceSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Text(
-                    'Professional Experience',
-                    style: TextStyle(
-                      fontSize: isDesktop ? 42 : 32,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.5,
+                  ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: [AppConstants.primaryColor, AppConstants.secondaryColor],
+                    ).createShader(bounds),
+                    child: Text(
+                      'Professional Experience',
+                      style: TextStyle(
+                        fontSize: isDesktop ? 48 : (screenWidth > 400 ? 36 : 32),
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -1,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 48),
 
-              // Desktop: Display in 2x2 grid, Mobile: stacked
-              if (isDesktop && experiences.length >= 2)
-                Column(
+              // Experience Timeline
+              if (isDesktop)
+                // Desktop: Timeline with timeline on left
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildExperienceCard(context, experiences[0]),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _buildExperienceCard(context, experiences[1]),
-                        ),
-                      ],
-                    ),
-                    if (experiences.length > 2) ...[
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildExperienceCard(
-                              context,
-                              experiences[2],
-                            ),
-                          ),
-                          if (experiences.length > 3) ...[
-                            const SizedBox(width: 24),
-                            Expanded(
-                              child: _buildExperienceCard(
-                                context,
-                                experiences[3],
+                    // Timeline
+                    SizedBox(
+                      width: 80,
+                      child: Column(
+                        children: List.generate(experiences.length, (index) {
+                          final isLast = index == experiences.length - 1;
+                          return Column(
+                            children: [
+                              // Timeline circle
+                              Container(
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppConstants.primaryColor,
+                                  border: Border.all(
+                                    color: Theme.of(context).scaffoldBackgroundColor,
+                                    width: 4,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ],
+                              if (!isLast) ...[
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 2,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        AppConstants.primaryColor.withOpacity(0.3),
+                                        AppConstants.secondaryColor.withOpacity(0.3),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                              ],
+                            ],
+                          );
+                        }),
                       ),
-                    ],
+                    ),
+                    
+                    // Experience Cards
+                    const SizedBox(width: 40),
+                    Expanded(
+                      child: Column(
+                        children: List.generate(experiences.length, (index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: index < experiences.length - 1 ? 48 : 0,
+                            ),
+                            child: _buildModernExperienceCard(context, experiences[index], isDesktop),
+                          );
+                        }),
+                      ),
+                    ),
                   ],
                 )
               else
+                // Mobile: Vertical stack with connecting line
                 Column(
-                  children: experiences.map((exp) {
+                  children: List.generate(experiences.length, (index) {
                     return Padding(
                       padding: EdgeInsets.only(
-                        bottom: experiences.last == exp ? 0 : 24,
+                        bottom: index < experiences.length - 1 ? 32 : 0,
                       ),
-                      child: _buildExperienceCard(context, exp),
+                      child: _buildModernExperienceCard(context, experiences[index], isDesktop),
                     );
-                  }).toList(),
+                  }),
                 ),
             ],
           ),
@@ -111,132 +146,171 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceCard(BuildContext context, Experience exp) {
+  Widget _buildModernExperienceCard(BuildContext context, Experience exp, bool isDesktop) {
     return Container(
-      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
-          width: 1,
+          color: AppConstants.primaryColor.withOpacity(0.1),
+          width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
+            color: AppConstants.primaryColor.withOpacity(0.08),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () {},
+          child: Padding(
+            padding: EdgeInsets.all(isDesktop ? 32 : 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header Row
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      exp.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.3,
+                    // Icon
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppConstants.primaryColor.withOpacity(0.15),
+                            AppConstants.secondaryColor.withOpacity(0.15),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.business_rounded,
+                        color: AppConstants.primaryColor,
+                        size: isDesktop ? 28 : 24,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      exp.company,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: AppConstants.primaryColor,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.3,
+                    const SizedBox(width: 16),
+                    
+                    // Title and Company
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            exp.title,
+                            style: TextStyle(
+                              fontSize: isDesktop ? 24 : 20,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            exp.company,
+                            style: TextStyle(
+                              fontSize: isDesktop ? 16 : 14,
+                              color: AppConstants.primaryColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Period Badge
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isDesktop ? 16 : 12,
+                        vertical: isDesktop ? 10 : 8,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppConstants.primaryColor.withOpacity(0.1),
+                            AppConstants.secondaryColor.withOpacity(0.1),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppConstants.primaryColor.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Text(
+                        exp.period,
+                        style: TextStyle(
+                          color: AppConstants.primaryColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: isDesktop ? 13 : 12,
+                          letterSpacing: 0.3,
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: AppConstants.primaryColor.withOpacity(0.08),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppConstants.primaryColor.withOpacity(0.2),
-                  ),
-                ),
-                child: Text(
-                  exp.period,
-                  style: const TextStyle(
-                    color: AppConstants.primaryColor,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 11,
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          // Show only first 3 responsibilities for card view
-          ...exp.responsibilities.map(
-            (resp) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 7, right: 10),
-                    child: Container(
-                      width: 5,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: AppConstants.primaryColor,
-                        shape: BoxShape.circle,
-                      ),
+                
+                const SizedBox(height: 24),
+                
+                // Divider
+                Container(
+                  height: 2,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppConstants.primaryColor.withOpacity(0.2),
+                        Colors.transparent,
+                      ],
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      resp,
-                      style: TextStyle(
-                        height: 1.6,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.color?.withOpacity(0.8),
-                        letterSpacing: 0.2,
+                ),
+                
+                const SizedBox(height: 20),
+                
+                // Responsibilities
+                Column(
+                  children: exp.responsibilities.take(4).map((responsibility) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6, right: 12),
+                            child: Icon(
+                              Icons.check_circle_rounded,
+                              size: isDesktop ? 20 : 18,
+                              color: AppConstants.primaryColor.withOpacity(0.8),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              responsibility,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 15 : 14,
+                                height: 1.6,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color
+                                    ?.withOpacity(0.8),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
-          // if (exp.responsibilities.length > 3)
-          //   Padding(
-          //     padding: const EdgeInsets.only(top: 4),
-          //     child: Text(
-          //       '+${exp.responsibilities.length - 3} more',
-          //       style: TextStyle(
-          //         fontSize: 13,
-          //         color: AppConstants.primaryColor,
-          //         fontWeight: FontWeight.w600,
-          //         fontStyle: FontStyle.italic,
-          //       ),
-          //     ),
-          //   ),
-        ],
+        ),
       ),
     );
   }

@@ -118,7 +118,7 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
           ),
           image: DecorationImage(
             image: AssetImage(widget.images[0]),
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             onError: (exception, stackTrace) {
               // Handle error if image not found
             },

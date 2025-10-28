@@ -10,11 +10,12 @@ class SkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 48 : 24,
-        vertical: 80,
+        horizontal: isDesktop ? 48 : (screenWidth > 400 ? 24 : 16),
+        vertical: isDesktop ? 80 : 60,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
@@ -41,10 +42,10 @@ class SkillsSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Text(
+                  Text(
                     'Technical Skills',
                     style: TextStyle(
-                      fontSize: 42,
+                      fontSize: isDesktop ? 42 : (screenWidth > 400 ? 32 : 28),
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
                     ),

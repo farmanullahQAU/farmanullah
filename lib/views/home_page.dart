@@ -7,7 +7,6 @@ import 'package:farmanullah/widgets/portfolio_section.dart';
 import 'package:farmanullah/widgets/section_divider.dart';
 import 'package:farmanullah/widgets/services_section.dart';
 import 'package:farmanullah/widgets/skills_section.dart';
-import 'package:farmanullah/widgets/sticky_navbar_delegate.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,15 +33,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentSection = section;
     });
-    await Future.delayed(const Duration(milliseconds: 150));
+
+    // Small delay to ensure the state is updated
+    await Future.delayed(const Duration(milliseconds: 50));
+
     if (!mounted) return;
     final context = key.currentContext;
     if (context != null) {
-      Scrollable.ensureVisible(
+      // Use CustomScrollView's scroll controller for smooth scrolling
+      await Scrollable.ensureVisible(
         context,
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOut,
-        alignment: 0.0, // Scroll to top of the section
+        alignment: 0.05, // Small offset from top
       );
     }
   }
@@ -89,72 +92,107 @@ class _HomePageState extends State<HomePage> {
         ? 60.0
         : 58.0;
 
+    // Allow mobile menu to expand
+    final maxNavbarHeight = isDesktop ? 64.0 : 400.0;
+
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          // Sticky Navigation Bar
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: StickyNavBarDelegate(
-              height: navbarHeight,
-              child: NavBar(
-                key: ValueKey(_currentSection),
-                currentSection: _currentSection,
-                onHome: () => _scrollToSection(_homeKey, 'home'),
-                onExperience: () =>
-                    _scrollToSection(_experienceKey, 'experience'),
-                onServices: () => _scrollToSection(_servicesKey, 'services'),
-                onPortfolio: () => _scrollToSection(_portfolioKey, 'portfolio'),
-                onContact: () => _scrollToSection(_contactKey, 'contact'),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(), // Smooth scrolling
+            slivers: [
+              SliverToBoxAdapter(
+                child: NavBar(
+                  key: ValueKey(_currentSection),
+                  currentSection: _currentSection,
+                  onHome: () => _scrollToSection(_homeKey, 'home'),
+                  onExperience: () =>
+                      _scrollToSection(_experienceKey, 'experience'),
+                  onServices: () => _scrollToSection(_servicesKey, 'services'),
+                  onPortfolio: () =>
+                      _scrollToSection(_portfolioKey, 'portfolio'),
+                  onContact: () => _scrollToSection(_contactKey, 'contact'),
+                ),
               ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            key: _homeKey,
-            child: HomeSection(data: _portfolioData),
-          ),
-          const SliverToBoxAdapter(child: SectionDivider()),
-          SliverToBoxAdapter(
-            key: _experienceKey,
-            child: ExperienceSection(experiences: _portfolioData.experiences),
-          ),
-          const SliverToBoxAdapter(child: SectionDivider()),
-          SliverToBoxAdapter(key: _servicesKey, child: ServicesSection()),
-          const SliverToBoxAdapter(child: SectionDivider()),
-          SliverToBoxAdapter(
-            key: _skillsKey,
-            child: SkillsSection(skills: _portfolioData.skills),
-          ),
-          const SliverToBoxAdapter(child: SectionDivider()),
-          SliverToBoxAdapter(
-            key: _portfolioKey,
-            child: PortfolioSection(projects: _portfolioData.projects),
-          ),
-          const SliverToBoxAdapter(child: SectionDivider()),
-          SliverToBoxAdapter(
-            key: _contactKey,
-            child: ContactSection(
-              email: _portfolioData.email,
-              phone: _portfolioData.phone,
-              linkedIn: _portfolioData.linkedIn,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.all(32),
-              color: Theme.of(context).cardColor.withOpacity(0.3),
-              child: Center(
-                child: Text(
-                  '© 2024 Farman Ullah. All rights reserved.',
-                  style: TextStyle(
-                    color: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.color?.withOpacity(0.6),
+
+              // Sticky Navigation Bar
+              // SliverPersistentHeader(
+              //   pinned: true,
+              //   delegate: StickyNavBarDelegate(
+              //     height: navbarHeight,
+              //     maxHeight: maxNavbarHeight,
+              //     child: NavBar(
+              //       key: ValueKey(_currentSection),
+              //       currentSection: _currentSection,
+              //       onHome: () => _scrollToSection(_homeKey, 'home'),
+              //       onExperience: () =>
+              //           _scrollToSection(_experienceKey, 'experience'),
+              //       onServices: () => _scrollToSection(_servicesKey, 'services'),
+              //       onPortfolio: () => _scrollToSection(_portfolioKey, 'portfolio'),
+              //       onContact: () => _scrollToSection(_contactKey, 'contact'),
+              //     ),
+              //   ),
+              // ),
+              SliverToBoxAdapter(
+                key: _homeKey,
+                child: HomeSection(data: _portfolioData),
+              ),
+              const SliverToBoxAdapter(child: SectionDivider()),
+              SliverToBoxAdapter(
+                key: _experienceKey,
+                child: ExperienceSection(
+                  experiences: _portfolioData.experiences,
+                ),
+              ),
+              const SliverToBoxAdapter(child: SectionDivider()),
+              SliverToBoxAdapter(key: _servicesKey, child: ServicesSection()),
+              const SliverToBoxAdapter(child: SectionDivider()),
+              SliverToBoxAdapter(
+                key: _skillsKey,
+                child: SkillsSection(skills: _portfolioData.skills),
+              ),
+              const SliverToBoxAdapter(child: SectionDivider()),
+              SliverToBoxAdapter(
+                key: _portfolioKey,
+                child: PortfolioSection(projects: _portfolioData.projects),
+              ),
+              const SliverToBoxAdapter(child: SectionDivider()),
+              SliverToBoxAdapter(
+                key: _contactKey,
+                child: ContactSection(
+                  email: _portfolioData.email,
+                  phone: _portfolioData.phone,
+                  linkedIn: _portfolioData.linkedIn,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(32),
+                  color: Theme.of(context).cardColor.withOpacity(0.3),
+                  child: Center(
+                    child: Text(
+                      '© 2024 Farman Ullah. All rights reserved.',
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.color?.withOpacity(0.6),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
+          ),
+
+          NavBar(
+            key: ValueKey(_currentSection),
+            currentSection: _currentSection,
+            onHome: () => _scrollToSection(_homeKey, 'home'),
+            onExperience: () => _scrollToSection(_experienceKey, 'experience'),
+            onServices: () => _scrollToSection(_servicesKey, 'services'),
+            onPortfolio: () => _scrollToSection(_portfolioKey, 'portfolio'),
+            onContact: () => _scrollToSection(_contactKey, 'contact'),
           ),
         ],
       ),

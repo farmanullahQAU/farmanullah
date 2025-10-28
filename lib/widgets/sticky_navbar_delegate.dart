@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 class StickyNavBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
   final double height;
+  final double maxHeight;
 
-  StickyNavBarDelegate({required this.child, this.height = 64});
+  StickyNavBarDelegate({
+    required this.child,
+    this.height = 64,
+    this.maxHeight = 400,
+  });
 
   @override
   double get minExtent => height;
 
   @override
-  double get maxExtent => height;
+  double get maxExtent => maxHeight;
 
   @override
   Widget build(
@@ -33,6 +38,7 @@ class StickyNavBarDelegate extends SliverPersistentHeaderDelegate {
                 ]
               : null,
         ),
+        clipBehavior: Clip.none,
         child: child,
       ),
     );
