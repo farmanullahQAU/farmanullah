@@ -108,8 +108,8 @@ class HomeSection extends StatelessWidget {
         child: Image.asset(
           data.profileImagePath,
           fit: BoxFit.cover,
-          cacheWidth: 400,
-          cacheHeight: 400,
+          // cacheWidth: 400,
+          // cacheHeight: 400,
           errorBuilder: (context, error, stackTrace) {
             return Container(
               color: AppConstants.primaryColor.withOpacity(0.1),
@@ -123,7 +123,7 @@ class HomeSection extends StatelessWidget {
 
   Widget _buildDesktopProfileImage() {
     return Container(
-      width: 400,
+      width: 350,
       height: 400,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -142,8 +142,8 @@ class HomeSection extends StatelessWidget {
         child: Image.asset(
           data.profileImagePath,
           fit: BoxFit.cover,
-          cacheWidth: 400,
-          cacheHeight: 400,
+          // cacheWidth: 400,
+          // cacheHeight: 400,
           errorBuilder: (context, error, stackTrace) {
             return Container(
               color: AppConstants.primaryColor.withOpacity(0.1),

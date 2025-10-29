@@ -1,10 +1,10 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/widgets/contact_section.dart';
 import 'package:farmanullah/widgets/experience_section.dart';
+import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:farmanullah/widgets/home_section.dart';
 import 'package:farmanullah/widgets/nav_bar.dart';
 import 'package:farmanullah/widgets/portfolio_section.dart';
-import 'package:farmanullah/widgets/section_divider.dart';
 import 'package:farmanullah/widgets/services_section.dart';
 import 'package:farmanullah/widgets/skills_section.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                 key: _homeKey,
                 child: HomeSection(data: _portfolioData),
               ),
-              const SliverToBoxAdapter(child: SectionDivider()),
+              const SliverToBoxAdapter(child: HeaderDivider()),
               SliverToBoxAdapter(
                 key: _experienceKey,
                 child: ExperienceSection(
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                       _portfolioData.uiContent.sectionTitles['experience']!,
                 ),
               ),
-              const SliverToBoxAdapter(child: SectionDivider()),
+              const SliverToBoxAdapter(child: HeaderDivider()),
               SliverToBoxAdapter(
                 key: _servicesKey,
                 child: ServicesSection(
@@ -184,7 +184,9 @@ class _HomePageState extends State<HomePage> {
                       _portfolioData.uiContent.sectionTitles['services']!,
                 ),
               ),
-              const SliverToBoxAdapter(child: SectionDivider()),
+              // const SliverToBoxAdapter(child: SectionDivider()),
+              const SliverToBoxAdapter(child: HeaderDivider()),
+
               SliverToBoxAdapter(
                 key: _skillsKey,
                 child: SkillsSection(
@@ -193,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                       _portfolioData.uiContent.sectionTitles['skills']!,
                 ),
               ),
-              const SliverToBoxAdapter(child: SectionDivider()),
+              const SliverToBoxAdapter(child: HeaderDivider()),
+
               SliverToBoxAdapter(
                 key: _portfolioKey,
                 child: PortfolioSection(
@@ -202,7 +205,8 @@ class _HomePageState extends State<HomePage> {
                       _portfolioData.uiContent.sectionTitles['portfolio']!,
                 ),
               ),
-              const SliverToBoxAdapter(child: SectionDivider()),
+              const SliverToBoxAdapter(child: HeaderDivider()),
+
               SliverToBoxAdapter(
                 key: _contactKey,
                 child: ContactSection(data: _portfolioData),

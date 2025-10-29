@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
+<!-- Professional splash screen with brand colors -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/white" />
-
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+    <!-- Background color matching light theme -->
+    <item>
+        <color android:color="#F8FAFC"/>
+    </item>
+    
+    <!-- Optional: Add gradient overlay for visual appeal -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="135"
+                android:startColor="#9333EA"
+                android:centerColor="#7C3AED"
+                android:endColor="#9333EA"
+                android:type="linear"
+                android:alpha="0.05"/>
+        </shape>
+    </item>
 </layer-list>

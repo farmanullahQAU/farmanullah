@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 class HeaderDivider extends StatelessWidget {
   final bool isDesktop;
 
-  const HeaderDivider({super.key, this.isDesktop = false});
+  const HeaderDivider({super.key, this.isDesktop = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: isDesktop
-          ? const EdgeInsets.symmetric(horizontal: 64)
-          : const EdgeInsets.symmetric(horizontal: 32),
+      margin: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.3,
+      ),
+      padding: EdgeInsets.symmetric(vertical: 40),
+
+      // margin: isDesktop
+      //     ? const EdgeInsets.symmetric(horizontal: 200, vertical: 40)
+      //     : const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
       child: Row(
         children: [
           // Start bubble

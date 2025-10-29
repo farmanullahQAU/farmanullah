@@ -1,6 +1,5 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
-import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 
 class ServicesSection extends StatelessWidget {
@@ -49,30 +48,16 @@ class ServicesSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: [
-                        AppConstants.primaryColor,
-                        AppConstants.secondaryColor,
-                      ],
-                    ).createShader(bounds),
-                    child: Text(
-                      sectionTitle,
-                      style: TextStyle(
-                        fontSize: isDesktop
-                            ? 48
-                            : (screenWidth > 400 ? 36 : 32),
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -1,
-                        color: Colors.white,
-                      ),
-                    ),
+                  Text(
+                    sectionTitle.toUpperCase(),
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
-              // Decorative divider below title (matches experience)
-              HeaderDivider(isDesktop: isDesktop),
+
+              // const SizedBox(height: 48),
+              // // Decorative divider below title (matches experience)
+              // HeaderDivider(isDesktop: isDesktop),
               const SizedBox(height: 48),
 
               // Services Grid - Same as before but with new card design

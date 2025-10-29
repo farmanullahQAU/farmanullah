@@ -1,6 +1,5 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
-import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:farmanullah/widgets/project_image_carousel.dart';
 import 'package:farmanullah/widgets/store_badges.dart';
 import 'package:flutter/material.dart';
@@ -82,19 +81,15 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                     ),
                     const SizedBox(width: 16),
                     Text(
-                      widget.sectionTitle,
-                      style: TextStyle(
-                        fontSize: isDesktop ? 42 : 32,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                      ),
+                      widget.sectionTitle.toUpperCase(),
+                      style: Theme.of(context).textTheme.displaySmall,
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: isDesktop ? 48 : 32),
-              HeaderDivider(isDesktop: isDesktop),
-              SizedBox(height: isDesktop ? 48 : 32),
+              SizedBox(height: 48),
+              // HeaderDivider(isDesktop: isDesktop),
+              // SizedBox(height: isDesktop ? 48 : 32),
               Stack(
                 clipBehavior: Clip.none,
 

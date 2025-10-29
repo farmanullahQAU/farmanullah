@@ -1,6 +1,5 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
-import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 
 class SkillsSection extends StatelessWidget {
@@ -49,17 +48,13 @@ class SkillsSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   Text(
-                    sectionTitle,
-                    style: TextStyle(
-                      fontSize: isDesktop ? 42 : (screenWidth > 400 ? 32 : 28),
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.5,
-                    ),
+                    sectionTitle.toUpperCase(),
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
-              HeaderDivider(isDesktop: isDesktop),
+              // const SizedBox(height: 48),
+              // HeaderDivider(isDesktop: isDesktop),
               const SizedBox(height: 48),
               if (isDesktop && skills.length >= 3)
                 IntrinsicHeight(

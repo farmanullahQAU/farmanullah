@@ -121,7 +121,8 @@ class PortfolioData {
       phone: '+92 304 9575366',
       email: 'farmanullahk437@gmail.com',
       linkedIn: 'farman4',
-      cvUrl: 'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing',
+      cvUrl:
+          'https://drive.google.com/file/d/18oHzH6hxA-Y6AiT0ivAmHKTov1YT7out/view?usp=sharing',
       profileImagePath: 'assets/images/projects/me.jpeg',
       bio:
           'Senior Flutter Developer with 4+ years of experience delivering production-grade Android/iOS apps. Specialized in Flutter, Firebase, REST/WebSocket, and state management (GetX, Riverpod, Bloc). Built and shipped scalable features including authentication, real-time data, payments, and monetization (AdMob, IAP). Hands-on with AI/Web3 integrations (Web3 Dart, MetaMask, Solidity). Strong in clean architecture, performance optimization, CI/CD, and full release lifecycle to Play Store and App Store.',
@@ -210,33 +211,34 @@ class PortfolioData {
       ],
       experiences: [
         Experience(
-          title: 'Flutter Developer',
+          title: 'Senior Flutter Developer',
           company: 'DigitalCode · Islamabad',
-          period: '2023 – 2024',
+          period: '2021 – 2024',
           responsibilities: [
             'Delivered crypto exchange & wallet features (KYC, P2P, spot trading) using Flutter + WebSocket; improved data sync latency by ~35%.',
             'Built responsive Material 3 UI with custom animations; increased session duration by 22%.',
             'Integrated REST APIs with robust error handling, retry logic, and token auth.',
             'Implemented secure chat (AWS Amplify + DynamoDB) and push notifications.',
             'Led QA support and release readiness; reduced crash-free sessions issues to <0.5%.',
+            'Developed and maintained multiple production apps over 3 years; contributed to architecture decisions and best practices.',
           ],
         ),
         Experience(
           title: 'Senior Flutter Developer',
-          company: 'Mohra · Saudi Arabia (Remote)',
-          period: '2022 – 2023',
+          company: 'DevCubix · Islamabad',
+          period: '2024 – Present',
           responsibilities: [
-            'Owned end-to-end Flutter delivery for a multi-purpose app; introduced Bloc and improved architecture for maintainability.',
-            'Integrated Firebase Auth, RTDB/Firestore, Cloud Functions, and FCM; reduced auth issues by 40%.',
-            'Implemented Google Maps/Places and location services with background handling.',
-            'Launched IAP and payment gateways with secure validation and receipt management.',
-            'Improved rendering performance via memoization, lazy-loading, and image optimization.',
+            'Lead Flutter development for enterprise mobile applications; architected scalable solutions using clean architecture principles.',
+            'Mentored junior developers and established code review processes; improved team velocity by 30% through knowledge sharing.',
+            'Delivered complex features including real-time synchronization, advanced state management (Bloc/Riverpod), and custom UI components.',
+            'Integrated third-party SDKs (payment gateways, analytics, push notifications) with robust error handling and fallback mechanisms.',
+            'Optimized app performance achieving 60fps on mid-range devices; reduced memory footprint by 25% through efficient resource management.',
           ],
         ),
         Experience(
           title: 'Junior Flutter Developer',
           company: 'Esols Technologies · Islamabad',
-          period: '2021 – 2022',
+          period: '2020 – 2021',
           responsibilities: [
             'Shipped 2 cross-platform apps to Play Store/App Store; adhered to release and store policies.',
             'Used GetX for routing, DI, and state; standardized module structure to speed feature dev by ~20%.',

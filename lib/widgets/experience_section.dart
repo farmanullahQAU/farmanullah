@@ -1,6 +1,5 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
-import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 
 class ExperienceSection extends StatefulWidget {
@@ -60,7 +59,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: const BoxConstraints(maxWidth: 1300),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -81,31 +80,16 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: [
-                        AppConstants.primaryColor,
-                        AppConstants.secondaryColor,
-                      ],
-                    ).createShader(bounds),
-                    child: Text(
-                      widget.sectionTitle,
-                      style: TextStyle(
-                        fontSize: isDesktop
-                            ? 48
-                            : (screenWidth > 400 ? 36 : 32),
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -1,
-                        color: Colors.white,
-                      ),
-                    ),
+                  Text(
+                    widget.sectionTitle.toUpperCase(),
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
+              // const SizedBox(height: 48),
 
-              // Decorative divider below title
-              HeaderDivider(isDesktop: isDesktop),
+              // // Decorative divider below title
+              // const SectionDivider(),
               const SizedBox(height: 48),
 
               // Experience Card Slider
@@ -142,39 +126,37 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                       top: 0,
                       bottom: 0,
                       child: Center(
-                        child: _currentPage > 0
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.primaryContainer,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 8,
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.chevron_left,
-                                    color: AppConstants.primaryColor,
-                                    size: 32,
-                                  ),
-                                  onPressed: () {
-                                    _pageController.previousPage(
-                                      duration: const Duration(
-                                        milliseconds: 300,
-                                      ),
-                                      curve: Curves.easeInOut,
-                                    );
-                                  },
-                                  iconSize: 32,
-                                  padding: const EdgeInsets.all(12),
-                                ),
-                              )
-                            : const SizedBox(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.chevron_left,
+                              color: AppConstants.primaryColor,
+                              size: 32,
+                            ),
+                            onPressed: () {
+                              if (_currentPage > 0) {
+                                _pageController.previousPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }
+                            },
+                            iconSize: 32,
+                            padding: const EdgeInsets.all(12),
+                          ),
+                        ),
                       ),
                     ),
                   // Right Navigation Button
@@ -270,23 +252,21 @@ class _ExperienceSectionState extends State<ExperienceSection> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppConstants.primaryColor.withOpacity(0.1),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppConstants.primaryColor.withOpacity(0.08),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        // border: Border.all(
+        //   color: AppConstants.primaryColor.withOpacity(0.1),
+        //   width: 1.5,
+        // ),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: AppConstants.primaryColor.withOpacity(0.08),
+        //     blurRadius: 24,
+        //     offset: const Offset(0, 8),
+        //   ),
+        // ],
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () {},
+        child: Container(
           child: Padding(
             padding: EdgeInsets.all(isDesktop ? 32 : 24),
             child: Column(

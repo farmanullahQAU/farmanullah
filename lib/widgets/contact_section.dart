@@ -1,6 +1,5 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
-import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,14 +19,7 @@ class ContactSection extends StatelessWidget {
         vertical: isDesktop ? 100 : 80,
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Theme.of(context).scaffoldBackgroundColor,
-            Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
-          ],
-        ),
+        color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
       child: Center(
         child: ConstrainedBox(
@@ -41,21 +33,13 @@ class ContactSection extends StatelessWidget {
 
               // Subtitle
               Text(
-                data.uiContent.contactSubtitle,
+                data.uiContent.contactSubtitle.toUpperCase(),
                 textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: isDesktop ? 20 : (screenWidth > 400 ? 18 : 16),
-                  color: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.color?.withOpacity(0.7),
-                  height: 1.6,
-
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              SizedBox(height: isDesktop ? 32 : 24),
-              HeaderDivider(isDesktop: isDesktop),
-              SizedBox(height: isDesktop ? 60 : 48),
+              SizedBox(height: 48),
+              // HeaderDivider(isDesktop: isDesktop),
+              // SizedBox(height: isDesktop ? 60 : 48),
 
               // Contact Cards Grid
               if (isDesktop)
