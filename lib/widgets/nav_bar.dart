@@ -1,22 +1,27 @@
 import 'package:farmanullah/controllers/theme_controller.dart';
+import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NavBar extends StatefulWidget {
+  final PortfolioData? data;
   final String currentSection;
   final VoidCallback? onHome;
   final VoidCallback? onExperience;
   final VoidCallback? onServices;
+  final VoidCallback? onSkills;
   final VoidCallback? onPortfolio;
   final VoidCallback? onContact;
 
   const NavBar({
     super.key,
     required this.currentSection,
+    this.data,
     this.onHome,
     this.onExperience,
     this.onServices,
+    this.onSkills,
     this.onPortfolio,
     this.onContact,
   });
@@ -43,7 +48,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth <= 768;
+    final isMobile = screenWidth <= 1000;
     final themeController = Get.find<ThemeController>();
 
     return Column(
@@ -79,35 +84,60 @@ class _NavBarState extends State<NavBar> {
                         children: [
                           _buildNavItem(
                             context,
-                            'Home',
+                            widget.data?.uiContent.navigationLabels['home'] ??
+                                'Home',
                             AppConstants.home,
                             widget.onHome,
                           ),
                           const SizedBox(width: 32),
                           _buildNavItem(
                             context,
-                            'Experience',
+                            widget
+                                    .data
+                                    ?.uiContent
+                                    .navigationLabels['experience'] ??
+                                'Experience',
                             AppConstants.experience,
                             widget.onExperience,
                           ),
                           const SizedBox(width: 32),
                           _buildNavItem(
                             context,
-                            'Services',
+                            widget
+                                    .data
+                                    ?.uiContent
+                                    .navigationLabels['services'] ??
+                                'Services',
                             AppConstants.services,
                             widget.onServices,
                           ),
                           const SizedBox(width: 32),
                           _buildNavItem(
                             context,
-                            'Portfolio',
+                            widget.data?.uiContent.navigationLabels['skills'] ??
+                                'Skills',
+                            AppConstants.skills,
+                            widget.onSkills,
+                          ),
+                          const SizedBox(width: 32),
+                          _buildNavItem(
+                            context,
+                            widget
+                                    .data
+                                    ?.uiContent
+                                    .navigationLabels['portfolio'] ??
+                                'Portfolio',
                             AppConstants.portfolio,
                             widget.onPortfolio,
                           ),
                           const SizedBox(width: 32),
                           _buildNavItem(
                             context,
-                            'Contact',
+                            widget
+                                    .data
+                                    ?.uiContent
+                                    .navigationLabels['contact'] ??
+                                'Contact',
                             AppConstants.contact,
                             widget.onContact,
                           ),
@@ -160,27 +190,44 @@ class _NavBarState extends State<NavBar> {
                       children: [
                         const SizedBox(height: 12),
                         _buildMobileNavItem(
-                          'Home',
+                          widget.data?.uiContent.navigationLabels['home'] ??
+                              'Home',
                           AppConstants.home,
                           () => _handleNavTap(widget.onHome),
                         ),
                         _buildMobileNavItem(
-                          'Experience',
+                          widget
+                                  .data
+                                  ?.uiContent
+                                  .navigationLabels['experience'] ??
+                              'Experience',
                           AppConstants.experience,
                           () => _handleNavTap(widget.onExperience),
                         ),
                         _buildMobileNavItem(
-                          'Services',
+                          widget.data?.uiContent.navigationLabels['services'] ??
+                              'Services',
                           AppConstants.services,
                           () => _handleNavTap(widget.onServices),
                         ),
                         _buildMobileNavItem(
-                          'Portfolio',
+                          widget.data?.uiContent.navigationLabels['skills'] ??
+                              'Skills',
+                          AppConstants.skills,
+                          () => _handleNavTap(widget.onSkills),
+                        ),
+                        _buildMobileNavItem(
+                          widget
+                                  .data
+                                  ?.uiContent
+                                  .navigationLabels['portfolio'] ??
+                              'Portfolio',
                           AppConstants.portfolio,
                           () => _handleNavTap(widget.onPortfolio),
                         ),
                         _buildMobileNavItem(
-                          'Contact',
+                          widget.data?.uiContent.navigationLabels['contact'] ??
+                              'Contact',
                           AppConstants.contact,
                           () => _handleNavTap(widget.onContact),
                         ),
@@ -198,7 +245,7 @@ class _NavBarState extends State<NavBar> {
     return GestureDetector(
       onTap: widget.onHome,
       child: Text(
-        'FARMAN ULLAH',
+        widget.data?.name ?? 'FARMAN ULLAH',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w900,

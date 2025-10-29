@@ -1,11 +1,48 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 
-class ExperienceSection extends StatelessWidget {
+class ExperienceSection extends StatefulWidget {
   final List<Experience> experiences;
+  final String sectionTitle;
 
-  const ExperienceSection({super.key, required this.experiences});
+  const ExperienceSection({
+    super.key,
+    required this.experiences,
+    required this.sectionTitle,
+  });
+
+  @override
+  State<ExperienceSection> createState() => _ExperienceSectionState();
+}
+
+class _ExperienceSectionState extends State<ExperienceSection> {
+  late PageController _pageController;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 1);
+    _pageController.addListener(_pageListener);
+  }
+
+  void _pageListener() {
+    final page = _pageController.page?.round() ?? 0;
+    if (page != _currentPage && mounted) {
+      setState(() {
+        _currentPage = page;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _pageController.removeListener(_pageListener);
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +83,17 @@ class ExperienceSection extends StatelessWidget {
                   const SizedBox(width: 16),
                   ShaderMask(
                     shaderCallback: (bounds) => LinearGradient(
-                      colors: [AppConstants.primaryColor, AppConstants.secondaryColor],
+                      colors: [
+                        AppConstants.primaryColor,
+                        AppConstants.secondaryColor,
+                      ],
                     ).createShader(bounds),
                     child: Text(
-                      'Professional Experience',
+                      widget.sectionTitle,
                       style: TextStyle(
-                        fontSize: isDesktop ? 48 : (screenWidth > 400 ? 36 : 32),
+                        fontSize: isDesktop
+                            ? 48
+                            : (screenWidth > 400 ? 36 : 32),
                         fontWeight: FontWeight.w900,
                         letterSpacing: -1,
                         color: Colors.white,
@@ -62,83 +104,156 @@ class ExperienceSection extends StatelessWidget {
               ),
               const SizedBox(height: 48),
 
-              // Experience Timeline
-              if (isDesktop)
-                // Desktop: Timeline with timeline on left
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Timeline
-                    SizedBox(
-                      width: 80,
-                      child: Column(
-                        children: List.generate(experiences.length, (index) {
-                          final isLast = index == experiences.length - 1;
-                          return Column(
-                            children: [
-                              // Timeline circle
-                              Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppConstants.primaryColor,
-                                  border: Border.all(
-                                    color: Theme.of(context).scaffoldBackgroundColor,
-                                    width: 4,
-                                  ),
-                                ),
-                              ),
-                              if (!isLast) ...[
-                                const SizedBox(height: 8),
-                                Container(
-                                  width: 2,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        AppConstants.primaryColor.withOpacity(0.3),
-                                        AppConstants.secondaryColor.withOpacity(0.3),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                              ],
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-                    
-                    // Experience Cards
-                    const SizedBox(width: 40),
-                    Expanded(
-                      child: Column(
-                        children: List.generate(experiences.length, (index) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              bottom: index < experiences.length - 1 ? 48 : 0,
+              // Decorative divider below title
+              HeaderDivider(isDesktop: isDesktop),
+              const SizedBox(height: 48),
+
+              // Experience Card Slider
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  SizedBox(
+                    height: isDesktop ? 500 : 450,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: widget.experiences.length,
+                      itemBuilder: (context, index) {
+                        return RepaintBoundary(
+                          key: ValueKey('experience_$index'),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isDesktop ? 12 : 8,
                             ),
-                            child: _buildModernExperienceCard(context, experiences[index], isDesktop),
-                          );
-                        }),
+                            child: _buildModernExperienceCard(
+                              context,
+                              widget.experiences[index],
+                              isDesktop,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  // Left Navigation Button
+                  if (isDesktop)
+                    Positioned(
+                      left: -20,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: _currentPage > 0
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.chevron_left,
+                                    color: AppConstants.primaryColor,
+                                    size: 32,
+                                  ),
+                                  onPressed: () {
+                                    _pageController.previousPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                  iconSize: 32,
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                              )
+                            : const SizedBox(),
                       ),
                     ),
-                  ],
-                )
-              else
-                // Mobile: Vertical stack with connecting line
-                Column(
-                  children: List.generate(experiences.length, (index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: index < experiences.length - 1 ? 32 : 0,
+                  // Right Navigation Button
+                  if (isDesktop)
+                    Positioned(
+                      right: -20,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: _currentPage < widget.experiences.length - 1
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.chevron_right,
+                                    color: AppConstants.primaryColor,
+                                    size: 32,
+                                  ),
+                                  onPressed: () {
+                                    _pageController.nextPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                  iconSize: 32,
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                              )
+                            : const SizedBox(),
                       ),
-                      child: _buildModernExperienceCard(context, experiences[index], isDesktop),
-                    );
-                  }),
+                    ),
+                ],
+              ),
+              // Navigation Dots
+              Padding(
+                padding: EdgeInsets.only(top: isDesktop ? 32 : 24, bottom: 16),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      widget.experiences.length,
+                      (index) => GestureDetector(
+                        onTap: () {
+                          _pageController.animateToPage(
+                            index,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                          width: _currentPage == index ? 24 : 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: _currentPage == index
+                                ? AppConstants.primaryColor
+                                : AppConstants.primaryColor.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
+              ),
             ],
           ),
         ),
@@ -146,7 +261,11 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildModernExperienceCard(BuildContext context, Experience exp, bool isDesktop) {
+  Widget _buildModernExperienceCard(
+    BuildContext context,
+    Experience exp,
+    bool isDesktop,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -196,7 +315,7 @@ class ExperienceSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    
+
                     // Title and Company
                     Expanded(
                       child: Column(
@@ -222,7 +341,7 @@ class ExperienceSection extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     // Period Badge
                     Container(
                       padding: EdgeInsets.symmetric(
@@ -253,9 +372,9 @@ class ExperienceSection extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Divider
                 Container(
                   height: 2,
@@ -268,9 +387,9 @@ class ExperienceSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Responsibilities
                 Column(
                   children: exp.responsibilities.take(4).map((responsibility) {
@@ -294,11 +413,9 @@ class ExperienceSection extends StatelessWidget {
                                 fontSize: isDesktop ? 15 : 14,
                                 height: 1.6,
                                 fontWeight: FontWeight.w500,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.color
-                                    ?.withOpacity(0.8),
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.color?.withOpacity(0.8),
                               ),
                             ),
                           ),

@@ -1,14 +1,19 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:farmanullah/widgets/project_image_carousel.dart';
 import 'package:farmanullah/widgets/store_badges.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/get_utils.dart';
 
 class PortfolioSection extends StatefulWidget {
   final List<Project> projects;
+  final String sectionTitle;
 
-  const PortfolioSection({super.key, required this.projects});
+  const PortfolioSection({
+    super.key,
+    required this.projects,
+    required this.sectionTitle,
+  });
 
   @override
   State<PortfolioSection> createState() => _PortfolioSectionState();
@@ -77,7 +82,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                     ),
                     const SizedBox(width: 16),
                     Text(
-                      'Portfolio',
+                      widget.sectionTitle,
                       style: TextStyle(
                         fontSize: isDesktop ? 42 : 32,
                         fontWeight: FontWeight.w900,
@@ -87,6 +92,8 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                   ],
                 ),
               ),
+              SizedBox(height: isDesktop ? 48 : 32),
+              HeaderDivider(isDesktop: isDesktop),
               SizedBox(height: isDesktop ? 48 : 32),
               Stack(
                 clipBehavior: Clip.none,
@@ -102,6 +109,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                       itemCount: widget.projects.length,
                       itemBuilder: (context, index) {
                         return RepaintBoundary(
+                          key: ValueKey('project_$index'),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal: isDesktop ? 12 : 8,
@@ -126,10 +134,9 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                         child: _currentPage > 0
                             ? Container(
                                 decoration: BoxDecoration(
-                                  color: context
-                                      .theme
-                                      .colorScheme
-                                      .primaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
@@ -169,10 +176,9 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                         child: _currentPage < widget.projects.length - 1
                             ? Container(
                                 decoration: BoxDecoration(
-                                  color: context
-                                      .theme
-                                      .colorScheme
-                                      .primaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(

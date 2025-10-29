@@ -9,9 +9,7 @@ class HomeSection extends StatelessWidget {
   const HomeSection({super.key, required this.data});
 
   Future<void> _downloadCV(BuildContext context) async {
-    final url = Uri.parse(
-      'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing',
-    );
+    final url = Uri.parse(data.cvUrl);
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
@@ -31,7 +29,7 @@ class HomeSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 48 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 100 : 60,
+        vertical: isDesktop ? 50 : 30,
       ),
       child: Center(
         child: ConstrainedBox(
@@ -60,10 +58,11 @@ class HomeSection extends StatelessWidget {
                         _buildName(context, isDesktop, screenWidth),
                         const SizedBox(height: 16),
                         _buildTitle(context, isDesktop, screenWidth),
-                        SizedBox(height: isDesktop ? 32 : 24),
+                        SizedBox(height: isDesktop ? 16 : 8),
                         _buildBio(context, isDesktop, screenWidth),
-                        SizedBox(height: isDesktop ? 48 : 32),
+                        SizedBox(height: isDesktop ? 32 : 32),
                         _buildActionButtons(context, isDesktop, screenWidth),
+                        SizedBox(height: isDesktop ? 16 : 8),
                       ],
                     ),
                   ),
@@ -106,7 +105,18 @@ class HomeSection extends StatelessWidget {
         ],
       ),
       child: ClipOval(
-        child: Image.asset("assets/images/projects/me.jpeg", fit: BoxFit.cover),
+        child: Image.asset(
+          data.profileImagePath,
+          fit: BoxFit.cover,
+          cacheWidth: 400,
+          cacheHeight: 400,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: AppConstants.primaryColor.withOpacity(0.1),
+              child: const Icon(Icons.person, size: 100),
+            );
+          },
+        ),
       ),
     );
   }
@@ -129,7 +139,18 @@ class HomeSection extends StatelessWidget {
         ],
       ),
       child: ClipOval(
-        child: Image.asset("assets/images/projects/me.jpeg", fit: BoxFit.cover),
+        child: Image.asset(
+          data.profileImagePath,
+          fit: BoxFit.cover,
+          cacheWidth: 400,
+          cacheHeight: 400,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: AppConstants.primaryColor.withOpacity(0.1),
+              child: const Icon(Icons.person, size: 100),
+            );
+          },
+        ),
       ),
     );
   }
@@ -140,7 +161,7 @@ class HomeSection extends StatelessWidget {
     double screenWidth,
   ) {
     return Text(
-      'Hello, I\'m',
+      data.uiContent.greeting,
       textAlign: isDesktop ? TextAlign.left : TextAlign.center,
       style: TextStyle(
         fontSize: isDesktop ? 28 : (screenWidth > 400 ? 20 : 18),
@@ -150,21 +171,26 @@ class HomeSection extends StatelessWidget {
   }
 
   Widget _buildName(BuildContext context, bool isDesktop, double screenWidth) {
-    return Text(
-      data.name,
-      textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-      style: TextStyle(
-        fontSize: isDesktop ? 72 : (screenWidth > 400 ? 48 : 36),
-        fontWeight: FontWeight.bold,
-        height: 1.2,
-        color: Theme.of(context).textTheme.headlineLarge?.color,
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        colors: [AppConstants.primaryColor, Colors.red],
+      ).createShader(bounds),
+      child: Text(
+        data.name,
+        textAlign: isDesktop ? TextAlign.left : TextAlign.center,
+        style: TextStyle(
+          fontSize: isDesktop ? 72 : (screenWidth > 400 ? 48 : 36),
+          fontWeight: FontWeight.bold,
+          height: 1.2,
+          color: Colors.white,
+        ),
       ),
     );
   }
 
   Widget _buildTitle(BuildContext context, bool isDesktop, double screenWidth) {
     return Text(
-      'Flutter Developer',
+      data.uiContent.professionalTitle,
       textAlign: isDesktop ? TextAlign.left : TextAlign.center,
       style: TextStyle(
         fontSize: isDesktop ? 28 : (screenWidth > 400 ? 20 : 18),
@@ -194,17 +220,10 @@ class HomeSection extends StatelessWidget {
     if (isDesktop) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildPrimaryButton(context),
-          const SizedBox(width: 16),
-          _buildSecondaryButton(context),
-        ],
+        children: [_buildPrimaryButton(context)],
       );
     } else {
-      return SizedBox(
-        width: double.infinity,
-        child: _buildPrimaryButton(context, isMobile: true),
-      );
+      return SizedBox(child: _buildPrimaryButton(context, isMobile: true));
     }
   }
 
@@ -213,116 +232,109 @@ class HomeSection extends StatelessWidget {
       onPressed: () => _downloadCV(context),
       icon: const Icon(Icons.download_rounded, size: 22),
       label: Text(
-        'Download My CV',
-        style: TextStyle(
-          fontSize: isMobile ? 16 : 17,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.5,
-        ),
-      ),
-      style: FilledButton.styleFrom(
-        padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 24 : 32,
-          vertical: isMobile ? 16 : 20,
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
-  Widget _buildSecondaryButton(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: () => _downloadCV(context),
-      icon: const Icon(Icons.link_rounded, size: 20),
-      label: const Text(
-        'View Portfolio',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.3,
-        ),
-      ),
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        data.uiContent.buttonLabels['downloadCV']!,
+        style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.5),
       ),
     );
   }
 
   Widget _buildEducationCard(BuildContext context, bool isDesktop) {
-    return Container(
-      padding: EdgeInsets.all(isDesktop ? 32 : 24),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
-          width: 1,
+    return RepaintBoundary(
+      child: Container(
+        padding: EdgeInsets.all(isDesktop ? 32 : 24),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).shadowColor.withOpacity(0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 4,
-            height: isDesktop ? 120 : 100,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppConstants.primaryColor,
-                  AppConstants.secondaryColor,
-                ],
-              ),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          SizedBox(width: isDesktop ? 24 : 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: List.generate(data.education.length, (index) {
+            final edu = data.education[index];
+            return Column(
               children: [
-                Text(
-                  '2018 - 2020',
-                  style: TextStyle(
-                    color: AppConstants.primaryColor,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12,
-                    letterSpacing: 0.8,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 4,
+                      height: isDesktop ? 80 : 70,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppConstants.primaryColor,
+                            AppConstants.secondaryColor,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    SizedBox(width: isDesktop ? 24 : 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            edu.period,
+                            style: TextStyle(
+                              color: AppConstants.primaryColor,
+                              fontWeight: FontWeight.w800,
+                              fontSize: isDesktop ? 12 : 11,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                          SizedBox(height: isDesktop ? 12 : 8),
+                          Text(
+                            edu.degree,
+                            style: TextStyle(
+                              fontSize: isDesktop ? 22 : 20,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          SizedBox(height: isDesktop ? 8 : 6),
+                          Text(
+                            edu.institution,
+                            style: TextStyle(
+                              fontSize: isDesktop ? 15 : 14,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.3,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: isDesktop ? 12 : 8),
-                Text(
-                  'M.Sc. Computer Science',
-                  style: TextStyle(
-                    fontSize: isDesktop ? 22 : 20,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -0.3,
+                if (index < data.education.length - 1) ...[
+                  SizedBox(height: isDesktop ? 24 : 20),
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
-                ),
-                SizedBox(height: isDesktop ? 8 : 6),
-                Text(
-                  'Quaid-i-Azam University, Islamabad',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.color?.withOpacity(0.7),
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.3,
-                  ),
-                ),
+                  SizedBox(height: isDesktop ? 24 : 20),
+                ],
               ],
-            ),
-          ),
-        ],
+            );
+          }),
+        ),
       ),
     );
   }

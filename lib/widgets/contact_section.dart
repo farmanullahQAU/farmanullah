@@ -1,18 +1,13 @@
+import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactSection extends StatelessWidget {
-  final String email;
-  final String phone;
-  final String linkedIn;
+  final PortfolioData data;
 
-  const ContactSection({
-    super.key,
-    required this.email,
-    required this.phone,
-    required this.linkedIn,
-  });
+  const ContactSection({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +31,7 @@ class ContactSection extends StatelessWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: const BoxConstraints(maxWidth: 1300),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,7 +41,7 @@ class ContactSection extends StatelessWidget {
 
               // Subtitle
               Text(
-                'Ready to bring your ideas to life?\nLet\'s create something amazing together.',
+                data.uiContent.contactSubtitle,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: isDesktop ? 20 : (screenWidth > 400 ? 18 : 16),
@@ -58,6 +53,8 @@ class ContactSection extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
+              SizedBox(height: isDesktop ? 32 : 24),
+              HeaderDivider(isDesktop: isDesktop),
               SizedBox(height: isDesktop ? 60 : 48),
 
               // Contact Cards Grid
@@ -69,9 +66,9 @@ class ContactSection extends StatelessWidget {
                         context,
                         'Email',
                         Icons.email_outlined,
-                        email,
-                        'farmanullahk437@gmail.com',
-                        () => _launchEmail(email),
+                        data.email,
+                        data.email,
+                        () => _launchEmail(data.email),
                       ),
                     ),
                     const SizedBox(width: 24),
@@ -80,9 +77,9 @@ class ContactSection extends StatelessWidget {
                         context,
                         'Phone',
                         Icons.phone_outlined,
-                        phone,
-                        '+92 304 9575366',
-                        () => _launchPhone(phone),
+                        data.phone,
+                        data.phone,
+                        () => _launchPhone(data.phone),
                       ),
                     ),
                     const SizedBox(width: 24),
@@ -91,9 +88,9 @@ class ContactSection extends StatelessWidget {
                         context,
                         'LinkedIn',
                         Icons.account_circle_outlined,
-                        linkedIn,
+                        data.linkedIn,
                         'Connect on LinkedIn',
-                        () => _launchLinkedIn(linkedIn),
+                        () => _launchLinkedIn(data.linkedIn),
                       ),
                     ),
                   ],
@@ -105,27 +102,27 @@ class ContactSection extends StatelessWidget {
                       context,
                       'Email',
                       Icons.email_outlined,
-                      email,
-                      'farmanullahk437@gmail.com',
-                      () => _launchEmail(email),
+                      data.email,
+                      data.email,
+                      () => _launchEmail(data.email),
                     ),
                     const SizedBox(height: 20),
                     _buildModernContactCard(
                       context,
                       'Phone',
                       Icons.phone_outlined,
-                      phone,
-                      '+92 304 9575366',
-                      () => _launchPhone(phone),
+                      data.phone,
+                      data.phone,
+                      () => _launchPhone(data.phone),
                     ),
                     const SizedBox(height: 20),
                     _buildModernContactCard(
                       context,
                       'LinkedIn',
                       Icons.account_circle_outlined,
-                      linkedIn,
+                      data.linkedIn,
                       'Connect on LinkedIn',
-                      () => _launchLinkedIn(linkedIn),
+                      () => _launchLinkedIn(data.linkedIn),
                     ),
                   ],
                 ),
@@ -168,7 +165,7 @@ class ContactSection extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Text(
-                'Get in touch',
+                data.uiContent.sectionTitles['contact']!,
                 style: TextStyle(
                   fontSize: isDesktop ? 42 : 32,
                   fontWeight: FontWeight.w900,
@@ -192,98 +189,100 @@ class ContactSection extends StatelessWidget {
   ) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          padding: EdgeInsets.all(isDesktop ? 32 : 28),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppConstants.primaryColor.withOpacity(0.1),
-              width: 1.5,
+    return RepaintBoundary(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Container(
+            padding: EdgeInsets.all(isDesktop ? 32 : 28),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: AppConstants.primaryColor.withOpacity(0.1),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppConstants.primaryColor.withOpacity(0.05),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: AppConstants.primaryColor.withOpacity(0.05),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Icon with gradient background
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppConstants.primaryColor.withOpacity(0.15),
-                      AppConstants.secondaryColor.withOpacity(0.15),
-                    ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Icon with gradient background
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppConstants.primaryColor.withOpacity(0.15),
+                        AppConstants.secondaryColor.withOpacity(0.15),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  child: Icon(
+                    icon,
+                    color: AppConstants.primaryColor,
+                    size: isDesktop ? 32 : 28,
+                  ),
                 ),
-                child: Icon(
-                  icon,
-                  color: AppConstants.primaryColor,
-                  size: isDesktop ? 32 : 28,
-                ),
-              ),
-              SizedBox(height: isDesktop ? 24 : 20),
+                SizedBox(height: isDesktop ? 24 : 20),
 
-              // Title
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppConstants.primaryColor,
-                  letterSpacing: 1.2,
+                // Title
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppConstants.primaryColor,
+                    letterSpacing: 1.2,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
+                const SizedBox(height: 8),
 
-              // Value
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: isDesktop ? 18 : 16,
-                  fontWeight: FontWeight.w600,
-                  height: 1.4,
+                // Value
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: isDesktop ? 18 : 16,
+                    fontWeight: FontWeight.w600,
+                    height: 1.4,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Action indicator
-              Row(
-                children: [
-                  Text(
-                    'Click to ${title.toLowerCase()}',
-                    style: TextStyle(
-                      fontSize: 13,
+                // Action indicator
+                Row(
+                  children: [
+                    Text(
+                      'Click to ${title.toLowerCase()}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.color?.withOpacity(0.6),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 16,
                       color: Theme.of(
                         context,
                       ).textTheme.bodyMedium?.color?.withOpacity(0.6),
-                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 16,
-                    color: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.color?.withOpacity(0.6),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -298,7 +297,7 @@ class ContactSection extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => _launchEmail(email),
+        onTap: () => _launchEmail(data.email),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -328,7 +327,7 @@ class ContactSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'Let\'s Start a Project',
+                data.uiContent.contactCTA,
                 style: TextStyle(
                   fontSize: isDesktop ? 18 : 16,
                   fontWeight: FontWeight.w700,

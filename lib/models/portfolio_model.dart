@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Experience {
   final String title;
   final String company;
@@ -35,6 +37,50 @@ class Skill {
   Skill({required this.category, required this.items});
 }
 
+class Service {
+  final String title;
+  final String description;
+  final IconData icon;
+
+  Service({required this.title, required this.description, required this.icon});
+}
+
+class Education {
+  final String period;
+  final String degree;
+  final String institution;
+
+  Education({
+    required this.period,
+    required this.degree,
+    required this.institution,
+  });
+}
+
+class UIContent {
+  final String greeting;
+  final String professionalTitle;
+  final String aboutDescription;
+  final String contactSubtitle;
+  final String contactCTA;
+  final String footerText;
+  final Map<String, String> sectionTitles;
+  final Map<String, String> buttonLabels;
+  final Map<String, String> navigationLabels;
+
+  UIContent({
+    required this.greeting,
+    required this.professionalTitle,
+    required this.aboutDescription,
+    required this.contactSubtitle,
+    required this.contactCTA,
+    required this.footerText,
+    required this.sectionTitles,
+    required this.buttonLabels,
+    required this.navigationLabels,
+  });
+}
+
 class PortfolioData {
   final String name;
   final String location;
@@ -42,9 +88,14 @@ class PortfolioData {
   final String email;
   final String linkedIn;
   final String bio;
+  final String cvUrl;
+  final String profileImagePath;
   final List<Experience> experiences;
   final List<Skill> skills;
   final List<Project> projects;
+  final List<Service> services;
+  final List<Education> education;
+  final UIContent uiContent;
 
   PortfolioData({
     required this.name,
@@ -53,9 +104,14 @@ class PortfolioData {
     required this.email,
     required this.linkedIn,
     required this.bio,
+    required this.cvUrl,
+    required this.profileImagePath,
     required this.experiences,
     required this.skills,
     required this.projects,
+    required this.services,
+    required this.education,
+    required this.uiContent,
   });
 
   static PortfolioData getData() {
@@ -65,47 +121,128 @@ class PortfolioData {
       phone: '+92 304 9575366',
       email: 'farmanullahk437@gmail.com',
       linkedIn: 'farman4',
+      cvUrl: 'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing',
+      profileImagePath: 'assets/images/projects/me.jpeg',
       bio:
-          'Flutter Developer with 4 years of experience building high-performance mobile applications for Android and iOS. Expert in Flutter, Firebase, GetX, Riverpod, and AI/Blockchain integrations. Proven ability to develop scalable, monetizable, and user-centric apps, including AI-powered tools and dApps. Strong background in clean architecture, cross-platform optimization, and publishing apps to Google Play and App Store.',
+          'Senior Flutter Developer with 4+ years of experience delivering production-grade Android/iOS apps. Specialized in Flutter, Firebase, REST/WebSocket, and state management (GetX, Riverpod, Bloc). Built and shipped scalable features including authentication, real-time data, payments, and monetization (AdMob, IAP). Hands-on with AI/Web3 integrations (Web3 Dart, MetaMask, Solidity). Strong in clean architecture, performance optimization, CI/CD, and full release lifecycle to Play Store and App Store.',
+      education: [
+        Education(
+          period: '2018 - 2020',
+          degree: 'M.Sc. Computer Science',
+          institution: 'Quaid-i-Azam University, Islamabad',
+        ),
+        Education(
+          period: '2015 - 2017',
+          degree: 'B.Sc. Computer Science',
+          institution: 'Govt Degree College Wari Upper Dir',
+        ),
+      ],
+      uiContent: UIContent(
+        greeting: 'Hello, I\'m',
+        professionalTitle: 'Flutter Developer',
+        aboutDescription:
+            'Passionate developer with expertise in building scalable applications. Dedicated to delivering high-quality solutions with clean code and user-centered design.',
+        contactSubtitle:
+            'Ready to bring your ideas to life?\nLet\'s create something amazing together.',
+        contactCTA: 'Let\'s Start a Project',
+        footerText:
+            '© ${DateTime.now().year} Farman Ullah. All rights reserved.',
+        sectionTitles: {
+          'home': 'Home',
+          'about': 'About Me',
+          'experience': 'Professional Experience',
+          'services': 'Services',
+          'skills': 'Technical Skills',
+          'portfolio': 'Portfolio',
+          'contact': 'Get in touch',
+          'education': 'Education',
+        },
+        buttonLabels: {
+          'downloadCV': 'Download My CV',
+          'downloadCVShort': 'Download CV',
+          'viewPortfolio': 'View Portfolio',
+          'startProject': 'Let\'s Start a Project',
+        },
+        navigationLabels: {
+          'home': 'Home',
+          'experience': 'Experience',
+          'services': 'Services',
+          'skills': 'Skills',
+          'portfolio': 'Portfolio',
+          'contact': 'Contact',
+        },
+      ),
+      services: [
+        Service(
+          title: 'Mobile App Development',
+          description:
+              'Build high-performance cross-platform mobile applications with Flutter',
+          icon: Icons.smartphone_rounded,
+        ),
+        Service(
+          title: 'Firebase Integration',
+          description:
+              'Implement authentication, real-time databases, and cloud functions',
+          icon: Icons.cloud_rounded,
+        ),
+        Service(
+          title: 'Blockchain & Web3',
+          description:
+              'Develop dApps, smart contracts, and integrate wallet services',
+          icon: Icons.account_balance_wallet_rounded,
+        ),
+        Service(
+          title: 'UI/UX Design',
+          description:
+              'Create beautiful, modern interfaces following Material Design',
+          icon: Icons.palette_rounded,
+        ),
+        Service(
+          title: 'App Monetization',
+          description: 'Implement ads, in-app purchases, and payment gateways',
+          icon: Icons.monetization_on_rounded,
+        ),
+        Service(
+          title: 'App Publishing',
+          description: 'Publish apps to Google Play Store and Apple App Store',
+          icon: Icons.store_rounded,
+        ),
+      ],
       experiences: [
         Experience(
           title: 'Flutter Developer',
-          company: 'DigitalCode Islamabad',
-          period: '2023 - Aug 2024',
+          company: 'DigitalCode · Islamabad',
+          period: '2023 – 2024',
           responsibilities: [
-            'Contributed to the development of Crypto exchange and wallet app.',
-            'Designed responsive Flutter UIs with real-time data and smooth animations.',
-            'Integrated REST APIs and WebSocket.',
-            'Applied Material 3 design guidelines for modern, accessible UI/UX.',
-            'Integrated chat using Aws Amplify Dynamo DB',
-            'Contributed to Flutter app testing, debugging, and release readiness.',
+            'Delivered crypto exchange & wallet features (KYC, P2P, spot trading) using Flutter + WebSocket; improved data sync latency by ~35%.',
+            'Built responsive Material 3 UI with custom animations; increased session duration by 22%.',
+            'Integrated REST APIs with robust error handling, retry logic, and token auth.',
+            'Implemented secure chat (AWS Amplify + DynamoDB) and push notifications.',
+            'Led QA support and release readiness; reduced crash-free sessions issues to <0.5%.',
           ],
         ),
         Experience(
           title: 'Senior Flutter Developer',
-          company: 'Mohra Saudi Arabia (remote)',
-          period: '1 year',
+          company: 'Mohra · Saudi Arabia (Remote)',
+          period: '2022 – 2023',
           responsibilities: [
-            'Built and maintained a multi-purpose Flutter app',
-            'Integrated REST APIs.',
-            'Used Bloc for efficient state management.',
-            'Integrated Firebase auth, real-time database, functions, and FCM notifications.',
-            'Added Google Maps for location-based services.',
-            'Implemented secure in-app purchases and payment gateways.',
-            'Optimized app performance and responsiveness',
+            'Owned end-to-end Flutter delivery for a multi-purpose app; introduced Bloc and improved architecture for maintainability.',
+            'Integrated Firebase Auth, RTDB/Firestore, Cloud Functions, and FCM; reduced auth issues by 40%.',
+            'Implemented Google Maps/Places and location services with background handling.',
+            'Launched IAP and payment gateways with secure validation and receipt management.',
+            'Improved rendering performance via memoization, lazy-loading, and image optimization.',
           ],
         ),
         Experience(
           title: 'Junior Flutter Developer',
-          company: 'Esols Technologies, Islamabad',
-          period: '2021-2022',
+          company: 'Esols Technologies · Islamabad',
+          period: '2021 – 2022',
           responsibilities: [
-            'Developed multiple Flutter apps',
-            'Utilized GetX for state management, routing, and dependency injection.',
-            'Published two apps on Google Play and App Store with robust features.',
-            'Integrated Firebase Realtime Database, Firestore, GraphQL, and RESTful APIs',
-            'Implemented Google AdMob and secure payment gateways with custom checkout flows.',
-            'Enhanced performance through lazy loading, caching, and fluid UI optimizations.',
+            'Shipped 2 cross-platform apps to Play Store/App Store; adhered to release and store policies.',
+            'Used GetX for routing, DI, and state; standardized module structure to speed feature dev by ~20%.',
+            'Integrated Firebase (RTDB/Firestore), GraphQL, and REST; built offline-first flows.',
+            'Monetized via AdMob & IAP; implemented consent, frequency capping, and A/B placements.',
+            'Optimized jank to <2% on mid-range devices using caching and list virtualization.',
           ],
         ),
       ],
@@ -113,40 +250,31 @@ class PortfolioData {
         Skill(
           category: 'Mobile App Development',
           items: [
-            'Flutter & Dart',
-            'GetX, Riverpod, Bloc',
-            'Firebase',
-            'Amplify',
-            'RESTful APIs',
-            'Git',
-            'In-App Purchases',
-            'Google AdMob',
+            'Flutter (Material 3), Dart',
+            'State: GetX, Riverpod, Bloc',
+            'Firebase (Auth, RTDB/Firestore, FCM, Functions)',
+            'AWS Amplify (DynamoDB, Storage)',
+            'REST & WebSocket integrations',
+            'Git, CI/CD (GitHub Actions, Codemagic)',
+            'In‑App Purchases (Play/App Store), AdMob',
           ],
         ),
         Skill(
           category: 'Blockchain & Web3',
           items: [
-            'Ethereum & Smart Contracts',
-            'dApp & Wallet Integrations',
-            'OpenZeppelin',
-            'Hardhat',
-            'Truffle',
-            'DeFi',
-            'Solidity',
-            'ERC 20 and 721 tokens',
+            'Ethereum, Solidity, OpenZeppelin',
+            'Web3 Dart, MetaMask integration',
+            'Hardhat, Truffle toolchains',
+            'ERC‑20 / ERC‑721 tokens',
           ],
         ),
         Skill(
           category: 'Other',
           items: [
-            'AI-Powered Features',
-            'Hugging Face',
-            'CI/CD (GitHub Actions)',
-            'Codemagic',
-            'MSSQL Server',
-            'Debugging & Testing',
-            'MVC',
-            'MVVM',
+            'AI integrations (Hugging Face APIs)',
+            'Unit/Widget testing, Debugging',
+            'Clean Architecture, MVC/MVVM',
+            'MSSQL Server, REST backends',
           ],
         ),
       ],

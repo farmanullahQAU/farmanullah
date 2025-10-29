@@ -5,6 +5,7 @@ class AppConstants {
   static const Color primaryColor = Color(0xFF9333EA); // Vibrant purple
   static const Color secondaryColor = Color(0xFF7C3AED); // Deep purple
   static const Color accentColor = Color(0xFFA855F7); // Light purple
+  static const Color redColor = Color.fromARGB(255, 110, 11, 24); // Dark purple
 
   // Light theme colors
   static const Color lightBackground = Color(0xFFF8FAFC);
@@ -23,6 +24,7 @@ class AppConstants {
   static const String about = 'about';
   static const String experience = 'experience';
   static const String services = 'services';
+  static const String skills = 'skills';
   static const String portfolio = 'portfolio';
   static const String contact = 'contact';
 }

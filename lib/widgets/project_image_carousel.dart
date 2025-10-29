@@ -84,6 +84,8 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
                   child: Image.asset(
                     imagePath,
                     fit: BoxFit.cover,
+                    cacheWidth: 800,
+                    cacheHeight: 600,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey[800],
@@ -105,43 +107,44 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
   }
 
   Widget _buildMainImage(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: () => _openCarousel(0),
-      child: Container(
-        // height: 400,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+    return RepaintBoundary(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => _openCarousel(0),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+            image: DecorationImage(
+              image: AssetImage(widget.images[0]),
+              fit: BoxFit.contain,
+              onError: (exception, stackTrace) {
+                // Handle error if image not found
+              },
+            ),
           ),
-          image: DecorationImage(
-            image: AssetImage(widget.images[0]),
-            fit: BoxFit.contain,
-            onError: (exception, stackTrace) {
-              // Handle error if image not found
-            },
-          ),
-        ),
-        // child: ClipRRect(
-        //   borderRadius: BorderRadius.circular(16),
+          // child: ClipRRect(
+          //   borderRadius: BorderRadius.circular(16),
 
-        //   child: Image.asset(
-        //     widget.images.first,
-        //     fit: BoxFit.contain,
-        //     errorBuilder: (context, error, stackTrace) {
-        //       return Container(
-        //         color: Colors.grey[800],
-        //         child: Icon(
-        //           Icons.broken_image,
-        //           color: Colors.grey[400],
-        //           size: 40,
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
+          //   child: Image.asset(
+          //     widget.images.first,
+          //     fit: BoxFit.contain,
+          //     errorBuilder: (context, error, stackTrace) {
+          //       return Container(
+          //         color: Colors.grey[800],
+          //         child: Icon(
+          //           Icons.broken_image,
+          //           color: Colors.grey[400],
+          //           size: 40,
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+        ),
       ),
     );
   }
@@ -226,33 +229,39 @@ class _CarouselModalState extends State<_CarouselModal> {
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  }
                 },
                 itemCount: widget.images.length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Center(
-                      child: InteractiveViewer(
-                        minScale: 0.5,
-                        maxScale: 3.0,
-                        child: Image.asset(
-                          widget.images[index],
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[800],
-                              child: const Center(
-                                child: Icon(
-                                  Icons.broken_image,
-                                  color: Colors.white54,
-                                  size: 60,
+                  return RepaintBoundary(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Center(
+                        child: InteractiveViewer(
+                          minScale: 0.5,
+                          maxScale: 3.0,
+                          child: Image.asset(
+                            widget.images[index],
+                            fit: BoxFit.contain,
+                            cacheWidth: 1200,
+                            cacheHeight: 1600,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[800],
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: Colors.white54,
+                                    size: 60,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),

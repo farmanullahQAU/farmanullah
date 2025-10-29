@@ -1,11 +1,17 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/header_divider.dart';
 import 'package:flutter/material.dart';
 
 class SkillsSection extends StatelessWidget {
   final List<Skill> skills;
+  final String sectionTitle;
 
-  const SkillsSection({super.key, required this.skills});
+  const SkillsSection({
+    super.key,
+    required this.skills,
+    required this.sectionTitle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,7 @@ class SkillsSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   Text(
-                    'Technical Skills',
+                    sectionTitle,
                     style: TextStyle(
                       fontSize: isDesktop ? 42 : (screenWidth > 400 ? 32 : 28),
                       fontWeight: FontWeight.w900,
@@ -53,15 +59,20 @@ class SkillsSection extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 48),
+              HeaderDivider(isDesktop: isDesktop),
+              const SizedBox(height: 48),
               if (isDesktop && skills.length >= 3)
-                Row(
-                  children: [
-                    Expanded(child: _buildSkillCard(context, skills[0])),
-                    const SizedBox(width: 24),
-                    Expanded(child: _buildSkillCard(context, skills[1])),
-                    const SizedBox(width: 24),
-                    Expanded(child: _buildSkillCard(context, skills[2])),
-                  ],
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: _buildSkillCard(context, skills[0])),
+                      const SizedBox(width: 24),
+                      Expanded(child: _buildSkillCard(context, skills[1])),
+                      const SizedBox(width: 24),
+                      Expanded(child: _buildSkillCard(context, skills[2])),
+                    ],
+                  ),
                 )
               else
                 Column(
@@ -80,65 +91,67 @@ class SkillsSection extends StatelessWidget {
   }
 
   Widget _buildSkillCard(BuildContext context, Skill skill) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppConstants.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+    return RepaintBoundary(
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).shadowColor.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            child: Text(
-              skill.category,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppConstants.primaryColor,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppConstants.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                skill.category,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppConstants.primaryColor,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          ...skill.items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.check_circle,
-                    size: 16,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      item,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+            const SizedBox(height: 16),
+            ...skill.items.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        item,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

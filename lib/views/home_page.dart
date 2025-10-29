@@ -20,6 +20,8 @@ class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   final PortfolioData _portfolioData = PortfolioData.getData();
   String _currentSection = 'home';
+  DateTime _lastScrollUpdate = DateTime.now();
+  bool _isProgrammaticScroll = false;
 
   // GlobalKeys for each section to enable scroll-to functionality
   final GlobalKey _homeKey = GlobalKey();
@@ -30,6 +32,10 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _contactKey = GlobalKey();
 
   void _scrollToSection(GlobalKey key, String section) async {
+    if (_currentSection == section) return;
+
+    // Disable scroll listener during programmatic scroll
+    _isProgrammaticScroll = true;
     setState(() {
       _currentSection = section;
     });
@@ -37,16 +43,27 @@ class _HomePageState extends State<HomePage> {
     // Small delay to ensure the state is updated
     await Future.delayed(const Duration(milliseconds: 50));
 
-    if (!mounted) return;
+    if (!mounted) {
+      _isProgrammaticScroll = false;
+      return;
+    }
     final context = key.currentContext;
     if (context != null) {
       // Use CustomScrollView's scroll controller for smooth scrolling
       await Scrollable.ensureVisible(
         context,
         duration: const Duration(milliseconds: 800),
-        curve: Curves.easeInOut,
+        curve: Curves.easeInOutCubic,
         alignment: 0.05, // Small offset from top
       );
+
+      // Wait a bit more to ensure scroll completes
+      await Future.delayed(const Duration(milliseconds: 200));
+    }
+
+    // Re-enable scroll listener after scroll completes
+    if (mounted) {
+      _isProgrammaticScroll = false;
     }
   }
 
@@ -57,18 +74,41 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateCurrentSection() {
-    // Simple logic to update current section based on scroll position
-    // This is a basic implementation - can be enhanced with IntersectionObserver-like logic
-    if (_scrollController.hasClients) {
-      final offset = _scrollController.offset;
-      // Update based on approximate positions
-      if (offset < 300) {
-        if (_currentSection != 'home') {
-          setState(() {
-            _currentSection = 'home';
-          });
-        }
-      }
+    // Ignore updates during programmatic scrolling
+    if (_isProgrammaticScroll) return;
+
+    // Throttle updates to every 100ms for better performance
+    final now = DateTime.now();
+    if (now.difference(_lastScrollUpdate).inMilliseconds < 100) return;
+    _lastScrollUpdate = now;
+
+    if (!_scrollController.hasClients || !mounted) return;
+
+    // Use actual section positions instead of hardcoded offsets
+    final offset = _scrollController.offset;
+    String? newSection = _detectCurrentSection(offset);
+
+    if (newSection != null && newSection != _currentSection) {
+      setState(() {
+        _currentSection = newSection;
+      });
+    }
+  }
+
+  String? _detectCurrentSection(double offset) {
+    // Detect current section based on scroll offset
+    if (offset < 300) {
+      return 'home';
+    } else if (offset < 1500) {
+      return 'experience';
+    } else if (offset < 2500) {
+      return 'services';
+    } else if (offset < 3200) {
+      return 'skills';
+    } else if (offset < 4500) {
+      return 'portfolio';
+    } else {
+      return 'contact';
     }
   }
 
@@ -80,36 +120,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 768;
-    final isTablet = screenWidth > 600 && !isDesktop;
-
-    // Calculate responsive navbar height based on content
-    // Adjusted to match actual navbar content height
-    final navbarHeight = isDesktop
-        ? 64.0
-        : isTablet
-        ? 60.0
-        : 58.0;
-
-    // Allow mobile menu to expand
-    final maxNavbarHeight = isDesktop ? 64.0 : 400.0;
-
     return Scaffold(
       body: Stack(
         children: [
           CustomScrollView(
             controller: _scrollController,
-            physics: const BouncingScrollPhysics(), // Smooth scrolling
+            physics: const ClampingScrollPhysics(),
+            cacheExtent: 1000,
             slivers: [
               SliverToBoxAdapter(
                 child: NavBar(
                   key: ValueKey(_currentSection),
+                  data: _portfolioData,
                   currentSection: _currentSection,
                   onHome: () => _scrollToSection(_homeKey, 'home'),
                   onExperience: () =>
                       _scrollToSection(_experienceKey, 'experience'),
                   onServices: () => _scrollToSection(_servicesKey, 'services'),
+                  onSkills: () => _scrollToSection(_skillsKey, 'skills'),
                   onPortfolio: () =>
                       _scrollToSection(_portfolioKey, 'portfolio'),
                   onContact: () => _scrollToSection(_contactKey, 'contact'),
@@ -143,28 +171,41 @@ class _HomePageState extends State<HomePage> {
                 key: _experienceKey,
                 child: ExperienceSection(
                   experiences: _portfolioData.experiences,
+                  sectionTitle:
+                      _portfolioData.uiContent.sectionTitles['experience']!,
                 ),
               ),
               const SliverToBoxAdapter(child: SectionDivider()),
-              SliverToBoxAdapter(key: _servicesKey, child: ServicesSection()),
+              SliverToBoxAdapter(
+                key: _servicesKey,
+                child: ServicesSection(
+                  services: _portfolioData.services,
+                  sectionTitle:
+                      _portfolioData.uiContent.sectionTitles['services']!,
+                ),
+              ),
               const SliverToBoxAdapter(child: SectionDivider()),
               SliverToBoxAdapter(
                 key: _skillsKey,
-                child: SkillsSection(skills: _portfolioData.skills),
+                child: SkillsSection(
+                  skills: _portfolioData.skills,
+                  sectionTitle:
+                      _portfolioData.uiContent.sectionTitles['skills']!,
+                ),
               ),
               const SliverToBoxAdapter(child: SectionDivider()),
               SliverToBoxAdapter(
                 key: _portfolioKey,
-                child: PortfolioSection(projects: _portfolioData.projects),
+                child: PortfolioSection(
+                  projects: _portfolioData.projects,
+                  sectionTitle:
+                      _portfolioData.uiContent.sectionTitles['portfolio']!,
+                ),
               ),
               const SliverToBoxAdapter(child: SectionDivider()),
               SliverToBoxAdapter(
                 key: _contactKey,
-                child: ContactSection(
-                  email: _portfolioData.email,
-                  phone: _portfolioData.phone,
-                  linkedIn: _portfolioData.linkedIn,
-                ),
+                child: ContactSection(data: _portfolioData),
               ),
               SliverToBoxAdapter(
                 child: Container(
@@ -172,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                   color: Theme.of(context).cardColor.withOpacity(0.3),
                   child: Center(
                     child: Text(
-                      '© 2024 Farman Ullah. All rights reserved.',
+                      _portfolioData.uiContent.footerText,
                       style: TextStyle(
                         color: Theme.of(
                           context,
@@ -187,10 +228,12 @@ class _HomePageState extends State<HomePage> {
 
           NavBar(
             key: ValueKey(_currentSection),
+            data: _portfolioData,
             currentSection: _currentSection,
             onHome: () => _scrollToSection(_homeKey, 'home'),
             onExperience: () => _scrollToSection(_experienceKey, 'experience'),
             onServices: () => _scrollToSection(_servicesKey, 'services'),
+            onSkills: () => _scrollToSection(_skillsKey, 'skills'),
             onPortfolio: () => _scrollToSection(_portfolioKey, 'portfolio'),
             onContact: () => _scrollToSection(_contactKey, 'contact'),
           ),
