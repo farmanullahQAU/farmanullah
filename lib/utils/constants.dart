@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  // Purple theme colors
-  static const Color primaryColor = Color(0xFF9333EA); // Vibrant purple
-  static const Color secondaryColor = Color(0xFF7C3AED); // Deep purple
-  static const Color accentColor = Color(0xFFA855F7); // Light purple
+  // Branding color palette based on #9112BC
+  static const Color primaryColor = Color(0xFF9112BC); // Brand purple
+  static const Color secondaryColor = Color(0xFF7A0FA0); // Deep purple
+  static const Color accentColor = Color(0xFFA835D1); // Light purple accent
   static const Color redColor = Color.fromARGB(255, 110, 11, 24); // Dark purple
 
   // Light theme colors
@@ -48,9 +48,9 @@ class SpacingConstants {
   static double portfolioPaddingVerticalMobile = 24;
 
   // Section header spacing
-  static double sectionHeaderBarHeightDesktop = 50;
+  static double sectionHeaderBarHeightDesktop = 33;
   static double sectionHeaderBarHeightMobile = 40;
-  static double sectionHeaderBarWidth = 4;
+  static double sectionHeaderBarWidth = 6;
   static double sectionHeaderBarSpacing = 16;
   static double sectionHeaderBottomSpacing = 48;
 

@@ -1,5 +1,6 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/gradient_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -278,15 +279,12 @@ class AboutSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          GradientIconContainer(
+            icon: icon,
+            iconSize: 24,
             padding: EdgeInsets.all(SpacingConstants.iconContainerPaddingSmall),
-            decoration: BoxDecoration(
-              color: AppConstants.primaryColor.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(
-                SpacingConstants.spacingXL - 2,
-              ),
-            ),
-            child: Icon(icon, color: AppConstants.primaryColor, size: 24),
+            borderRadius: SpacingConstants.spacingXL - 2,
+            opacity: 0.08,
           ),
           SizedBox(height: SpacingConstants.spacingLG),
           Text(

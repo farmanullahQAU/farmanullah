@@ -1,5 +1,6 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 
 class SkillsSection extends StatelessWidget {
@@ -29,28 +30,7 @@ class SkillsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: SpacingConstants.sectionHeaderBarWidth,
-                    height: SpacingConstants.getSectionHeaderBarHeight(context),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppConstants.primaryColor,
-                          AppConstants.secondaryColor,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
-                  Text(
-                    sectionTitle.toUpperCase(),
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                ],
-              ),
+              SectionHeader(title: sectionTitle),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
               if (isDesktop && skills.length >= 3)
                 IntrinsicHeight(

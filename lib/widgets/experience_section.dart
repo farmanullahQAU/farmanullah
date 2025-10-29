@@ -1,5 +1,7 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/gradient_icon_container.dart';
+import 'package:farmanullah/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 
 class ExperienceSection extends StatefulWidget {
@@ -62,28 +64,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Title Section
-              Row(
-                children: [
-                  Container(
-                    width: SpacingConstants.sectionHeaderBarWidth,
-                    height: SpacingConstants.getSectionHeaderBarHeight(context),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppConstants.primaryColor,
-                          AppConstants.secondaryColor,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
-                  Text(
-                    widget.sectionTitle.toUpperCase(),
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                ],
-              ),
+              SectionHeader(title: widget.sectionTitle),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Experience Card Slider
@@ -281,94 +262,160 @@ class _ExperienceSectionState extends State<ExperienceSection> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header Row
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Icon
-                    Container(
-                      padding: EdgeInsets.all(SpacingConstants.spacingMD),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppConstants.primaryColor.withOpacity(0.15),
-                            AppConstants.secondaryColor.withOpacity(0.15),
+                // Header Section - Responsive layout
+                if (isDesktop)
+                  // Desktop: Icon, Title/Company, Period in one row
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Icon
+                      GradientIconContainer(
+                        icon: Icons.business_rounded,
+                        iconSize: 28,
+                        padding: EdgeInsets.all(SpacingConstants.spacingMD),
+                        borderRadius: SpacingConstants.spacingMD,
+                      ),
+                      SizedBox(width: SpacingConstants.spacingLG),
+
+                      // Title and Company
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              exp.title,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              exp.company,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppConstants.primaryColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(
-                          SpacingConstants.spacingMD,
+                      ),
+
+                      // Period Badge
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SpacingConstants.spacingLG,
+                          vertical: SpacingConstants.spacingXL - 2,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppConstants.primaryColor.withOpacity(0.1),
+                              AppConstants.secondaryColor.withOpacity(0.1),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            SpacingConstants.spacingXL - 2,
+                          ),
+                          border: Border.all(
+                            color: AppConstants.primaryColor.withOpacity(0.2),
+                          ),
+                        ),
+                        child: Text(
+                          exp.period,
+                          style: TextStyle(
+                            color: AppConstants.primaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            letterSpacing: 0.3,
+                          ),
                         ),
                       ),
-                      child: Icon(
-                        Icons.business_rounded,
-                        color: AppConstants.primaryColor,
-                        size: isDesktop ? 28 : 24,
-                      ),
-                    ),
-                    SizedBox(width: SpacingConstants.spacingLG),
-
-                    // Title and Company
-                    Expanded(
-                      child: Column(
+                    ],
+                  )
+                else
+                  // Mobile: Stacked layout to prevent overflow
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Icon and Title row
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            exp.title,
-                            style: TextStyle(
-                              fontSize: isDesktop ? 24 : 20,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: -0.5,
-                            ),
+                          GradientIconContainer(
+                            icon: Icons.business_rounded,
+                            iconSize: 20,
+                            padding: EdgeInsets.all(SpacingConstants.spacingMD),
+                            borderRadius: SpacingConstants.spacingMD,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            exp.company,
-                            style: TextStyle(
-                              fontSize: isDesktop ? 16 : 14,
-                              color: AppConstants.primaryColor,
-                              fontWeight: FontWeight.w700,
+                          SizedBox(width: SpacingConstants.spacingMD),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  exp.title,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: -0.5,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  exp.company,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppConstants.primaryColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-
-                    // Period Badge
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isDesktop
-                            ? SpacingConstants.spacingLG
-                            : SpacingConstants.spacingMD,
-                        vertical: isDesktop
-                            ? SpacingConstants.spacingXL - 2
-                            : SpacingConstants.spacingSM,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppConstants.primaryColor.withOpacity(0.1),
-                            AppConstants.secondaryColor.withOpacity(0.1),
-                          ],
+                      SizedBox(height: SpacingConstants.spacingMD),
+                      // Period Badge on mobile - full width
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SpacingConstants.spacingMD,
+                          vertical: SpacingConstants.spacingSM + 2,
                         ),
-                        borderRadius: BorderRadius.circular(
-                          SpacingConstants.spacingXL - 2,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppConstants.primaryColor.withOpacity(0.1),
+                              AppConstants.secondaryColor.withOpacity(0.1),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            SpacingConstants.spacingMD,
+                          ),
+                          border: Border.all(
+                            color: AppConstants.primaryColor.withOpacity(0.2),
+                          ),
                         ),
-                        border: Border.all(
-                          color: AppConstants.primaryColor.withOpacity(0.2),
-                        ),
-                      ),
-                      child: Text(
-                        exp.period,
-                        style: TextStyle(
-                          color: AppConstants.primaryColor,
-                          fontWeight: FontWeight.w700,
-                          fontSize: isDesktop ? 13 : 12,
-                          letterSpacing: 0.3,
+                        child: Text(
+                          exp.period,
+                          style: TextStyle(
+                            color: AppConstants.primaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            letterSpacing: 0.3,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
                 SizedBox(height: SpacingConstants.spacing2XL),
 

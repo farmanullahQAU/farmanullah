@@ -1,5 +1,6 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 
 class ServicesSection extends StatelessWidget {
@@ -19,7 +20,7 @@ class ServicesSection extends StatelessWidget {
     return Container(
       padding: SpacingConstants.getSectionPadding(context),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor.withOpacity(0.3),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.3),
       ),
       child: Center(
         child: ConstrainedBox(
@@ -30,28 +31,7 @@ class ServicesSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Hero Title
-              Row(
-                children: [
-                  Container(
-                    width: SpacingConstants.sectionHeaderBarWidth,
-                    height: SpacingConstants.getSectionHeaderBarHeight(context),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppConstants.primaryColor,
-                          AppConstants.secondaryColor,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
-                  Text(
-                    sectionTitle.toUpperCase(),
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                ],
-              ),
+              SectionHeader(title: sectionTitle),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Services Grid - Same as before but with new card design
@@ -176,12 +156,12 @@ class ServicesSection extends StatelessWidget {
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusXL),
           border: Border.all(
-            color: AppConstants.primaryColor.withOpacity(0.1),
+            color: AppConstants.primaryColor.withValues(alpha: 0.1),
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppConstants.primaryColor.withOpacity(0.08),
+              color: AppConstants.primaryColor.withValues(alpha: 0.08),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
@@ -208,8 +188,8 @@ class ServicesSection extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          AppConstants.primaryColor.withOpacity(0.15),
-                          AppConstants.secondaryColor.withOpacity(0.15),
+                          AppConstants.primaryColor.withValues(alpha: 0.15),
+                          AppConstants.secondaryColor.withValues(alpha: 0.15),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(
@@ -247,7 +227,7 @@ class ServicesSection extends StatelessWidget {
                       height: 1.6,
                       color: Theme.of(
                         context,
-                      ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                      ).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0.2,
                     ),

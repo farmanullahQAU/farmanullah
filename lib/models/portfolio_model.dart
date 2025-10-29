@@ -193,10 +193,10 @@ class PortfolioData {
           icon: Icons.account_balance_wallet_rounded,
         ),
         Service(
-          title: 'UI/UX Design',
+          title: 'AI Integration',
           description:
-              'Create beautiful, modern interfaces following Material Design',
-          icon: Icons.palette_rounded,
+              'Integrate AI capabilities, machine learning models, and intelligent features into applications',
+          icon: Icons.psychology_rounded,
         ),
         Service(
           title: 'App Monetization',

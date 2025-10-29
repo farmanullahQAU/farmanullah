@@ -1,5 +1,8 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
+import 'package:farmanullah/widgets/gradient_button.dart';
+import 'package:farmanullah/widgets/gradient_icon_container.dart';
+import 'package:farmanullah/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -131,28 +134,7 @@ class ContactSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              width: SpacingConstants.sectionHeaderBarWidth,
-              height: SpacingConstants.getSectionHeaderBarHeight(context),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppConstants.primaryColor,
-                    AppConstants.secondaryColor,
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
-            Text(
-              data.uiContent.sectionTitles['contact']!.toUpperCase(),
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-          ],
-        ),
+        SectionHeader(title: data.uiContent.sectionTitles['contact']!),
       ],
     );
   }
@@ -196,27 +178,7 @@ class ContactSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Icon with gradient background
-                Container(
-                  padding: EdgeInsets.all(
-                    SpacingConstants.iconContainerPadding,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppConstants.primaryColor.withOpacity(0.15),
-                        AppConstants.secondaryColor.withOpacity(0.15),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      SpacingConstants.borderRadiusLG,
-                    ),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: AppConstants.primaryColor,
-                    size: isDesktop ? 32 : 28,
-                  ),
-                ),
+                GradientIconContainer(icon: icon),
                 SizedBox(
                   height: isDesktop
                       ? SpacingConstants.spacing2XL
@@ -282,59 +244,10 @@ class ContactSection extends StatelessWidget {
     bool isDesktop,
     double screenWidth,
   ) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => _launchEmail(data.email),
-        borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: isDesktop
-                ? SpacingConstants.spacing5XL
-                : SpacingConstants.spacing3XL,
-            vertical: isDesktop
-                ? SpacingConstants.spacingXL
-                : SpacingConstants.spacingXL - 2,
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppConstants.primaryColor, AppConstants.secondaryColor],
-            ),
-            borderRadius: BorderRadius.circular(
-              SpacingConstants.borderRadiusLG,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppConstants.primaryColor.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.send_rounded,
-                color: Colors.white,
-                size: isDesktop
-                    ? SpacingConstants.spacing2XL
-                    : SpacingConstants.spacingXL + 2,
-              ),
-              SizedBox(width: SpacingConstants.spacingMD),
-              Text(
-                data.uiContent.contactCTA,
-                style: TextStyle(
-                  fontSize: isDesktop ? 18 : 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return GradientButton(
+      label: data.uiContent.contactCTA,
+      icon: Icons.send_rounded,
+      onPressed: () => _launchEmail(data.email),
     );
   }
 

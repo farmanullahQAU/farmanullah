@@ -1,6 +1,7 @@
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
 import 'package:farmanullah/widgets/project_image_carousel.dart';
+import 'package:farmanullah/widgets/section_header.dart';
 import 'package:farmanullah/widgets/store_badges.dart';
 import 'package:flutter/material.dart';
 
@@ -67,30 +68,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                       ? SpacingConstants.spacing2XL
                       : SpacingConstants.spacingSM,
                 ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: SpacingConstants.sectionHeaderBarWidth,
-                      height: SpacingConstants.getSectionHeaderBarHeight(
-                        context,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppConstants.primaryColor,
-                            AppConstants.secondaryColor,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
-                    Text(
-                      widget.sectionTitle.toUpperCase(),
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                  ],
-                ),
+                child: SectionHeader(title: widget.sectionTitle),
               ),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
               Stack(
