@@ -15,27 +15,25 @@ class SkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 48 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 80 : 60,
-      ),
+      padding: SpacingConstants.getSectionPadding(context),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1300),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    width: 4,
-                    height: 40,
+                    width: SpacingConstants.sectionHeaderBarWidth,
+                    height: SpacingConstants.getSectionHeaderBarHeight(context),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -46,25 +44,23 @@ class SkillsSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
                   Text(
                     sectionTitle.toUpperCase(),
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ],
               ),
-              // const SizedBox(height: 48),
-              // HeaderDivider(isDesktop: isDesktop),
-              const SizedBox(height: 48),
+              SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
               if (isDesktop && skills.length >= 3)
                 IntrinsicHeight(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(child: _buildSkillCard(context, skills[0])),
-                      const SizedBox(width: 24),
+                      SizedBox(width: SpacingConstants.getCardSpacing(context)),
                       Expanded(child: _buildSkillCard(context, skills[1])),
-                      const SizedBox(width: 24),
+                      SizedBox(width: SpacingConstants.getCardSpacing(context)),
                       Expanded(child: _buildSkillCard(context, skills[2])),
                     ],
                   ),
@@ -73,7 +69,9 @@ class SkillsSection extends StatelessWidget {
                 Column(
                   children: skills.map((skill) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
+                      padding: EdgeInsets.only(
+                        bottom: SpacingConstants.getCardSpacing(context),
+                      ),
                       child: _buildSkillCard(context, skill),
                     );
                   }).toList(),
@@ -88,10 +86,10 @@ class SkillsSection extends StatelessWidget {
   Widget _buildSkillCard(BuildContext context, Skill skill) {
     return RepaintBoundary(
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: SpacingConstants.getCardPadding(context),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).shadowColor.withOpacity(0.1),
@@ -104,10 +102,15 @@ class SkillsSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(
+                horizontal: SpacingConstants.spacingMD,
+                vertical: SpacingConstants.spacingXS + 2,
+              ),
               decoration: BoxDecoration(
                 color: AppConstants.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(
+                  SpacingConstants.borderRadiusSM,
+                ),
               ),
               child: Text(
                 skill.category,
@@ -118,18 +121,18 @@ class SkillsSection extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: SpacingConstants.spacingLG),
             ...skill.items.map(
               (item) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: SpacingConstants.spacingSM),
                 child: Row(
                   children: [
                     Icon(
                       Icons.check_circle,
-                      size: 16,
+                      size: SpacingConstants.spacingLG,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: SpacingConstants.spacingMD),
                     Expanded(
                       child: Text(
                         item,

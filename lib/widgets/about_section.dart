@@ -24,18 +24,16 @@ class AboutSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 64 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 120 : 80,
-      ),
+      padding: SpacingConstants.getAboutPadding(context),
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1400),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -60,21 +58,23 @@ class AboutSection extends StatelessWidget {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 16,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SpacingConstants.spacing2XL,
+                          vertical: SpacingConstants.spacingLG,
                         ),
                         backgroundColor: AppConstants.primaryColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(
+                            SpacingConstants.spacingMD,
+                          ),
                         ),
                         elevation: 0,
                       ),
                     ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: SpacingConstants.spacingXL),
 
               // Professional Bio
               SizedBox(
@@ -95,7 +95,7 @@ class AboutSection extends StatelessWidget {
 
               // Mobile CV Button
               if (!isDesktop) ...[
-                const SizedBox(height: 24),
+                SizedBox(height: SpacingConstants.spacing2XL),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -109,11 +109,15 @@ class AboutSection extends StatelessWidget {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      padding: EdgeInsets.symmetric(
+                        vertical: SpacingConstants.spacingXL - 2,
+                      ),
                       backgroundColor: AppConstants.primaryColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                          SpacingConstants.spacingMD,
+                        ),
                       ),
                       elevation: 0,
                     ),
@@ -121,7 +125,7 @@ class AboutSection extends StatelessWidget {
                 ),
               ],
 
-              const SizedBox(height: 80),
+              SizedBox(height: SpacingConstants.spacing7XL),
 
               // Contact Info Grid
               if (isDesktop)
@@ -135,7 +139,7 @@ class AboutSection extends StatelessWidget {
                         data.location,
                       ),
                     ),
-                    const SizedBox(width: 32),
+                    SizedBox(width: SpacingConstants.getCardSpacing(context)),
                     Expanded(
                       child: _buildContactCard(
                         context,
@@ -144,7 +148,7 @@ class AboutSection extends StatelessWidget {
                         data.phone,
                       ),
                     ),
-                    const SizedBox(width: 32),
+                    SizedBox(width: SpacingConstants.getCardSpacing(context)),
                     Expanded(
                       child: _buildContactCard(
                         context,
@@ -164,14 +168,14 @@ class AboutSection extends StatelessWidget {
                       Icons.location_on_rounded,
                       data.location,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: SpacingConstants.spacingXL),
                     _buildContactCard(
                       context,
                       'Phone',
                       Icons.phone_rounded,
                       data.phone,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: SpacingConstants.spacingXL),
                     _buildContactCard(
                       context,
                       'Email',
@@ -181,24 +185,24 @@ class AboutSection extends StatelessWidget {
                   ],
                 ),
 
-              const SizedBox(height: 100),
+              SizedBox(height: SpacingConstants.spacing8XL),
 
               // Education Section
               _buildSectionHeader(
                 context,
                 data.uiContent.sectionTitles['education']!,
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: SpacingConstants.spacing4XL),
               _buildEducationCard(context),
 
-              const SizedBox(height: 100),
+              SizedBox(height: SpacingConstants.spacing8XL),
 
               // Experience Section
               _buildSectionHeader(
                 context,
                 data.uiContent.sectionTitles['experience']!,
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: SpacingConstants.spacing4XL),
 
               ...List.generate(
                 data.experiences.length,
@@ -206,7 +210,7 @@ class AboutSection extends StatelessWidget {
                   children: [
                     _buildExperienceCard(context, data.experiences[i]),
                     if (i < data.experiences.length - 1)
-                      const SizedBox(height: 32),
+                      SizedBox(height: SpacingConstants.spacing3XL),
                   ],
                 ),
               ),
@@ -232,7 +236,7 @@ class AboutSection extends StatelessWidget {
             letterSpacing: -0.5,
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: SpacingConstants.spacingMD),
         Container(
           height: 4,
           width: 60,
@@ -254,10 +258,10 @@ class AboutSection extends StatelessWidget {
     String value,
   ) {
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: EdgeInsets.all(SpacingConstants.cardPaddingDesktop),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
         border: Border.all(
           color: Theme.of(context).dividerColor.withOpacity(0.1),
           width: 1,
@@ -275,14 +279,16 @@ class AboutSection extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(SpacingConstants.iconContainerPaddingSmall),
             decoration: BoxDecoration(
               color: AppConstants.primaryColor.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(
+                SpacingConstants.spacingXL - 2,
+              ),
             ),
             child: Icon(icon, color: AppConstants.primaryColor, size: 24),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: SpacingConstants.spacingLG),
           Text(
             title,
             style: TextStyle(
@@ -295,7 +301,7 @@ class AboutSection extends StatelessWidget {
               textBaseline: TextBaseline.ideographic,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: SpacingConstants.spacingSM),
           Text(
             value,
             style: const TextStyle(
@@ -315,10 +321,10 @@ class AboutSection extends StatelessWidget {
     final isDesktop = MediaQuery.of(context).size.width > 768;
     return RepaintBoundary(
       child: Container(
-        padding: EdgeInsets.all(isDesktop ? 32 : 24),
+        padding: SpacingConstants.getCardPadding(context),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
           border: Border.all(
             color: Theme.of(context).dividerColor.withOpacity(0.1),
             width: 1,
@@ -340,7 +346,7 @@ class AboutSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 4,
+                      width: SpacingConstants.sectionHeaderBarWidth,
                       height: isDesktop ? 80 : 70,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -354,7 +360,11 @@ class AboutSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    SizedBox(width: isDesktop ? 32 : 16),
+                    SizedBox(
+                      width: isDesktop
+                          ? SpacingConstants.spacing3XL
+                          : SpacingConstants.spacingLG,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,7 +378,11 @@ class AboutSection extends StatelessWidget {
                               letterSpacing: 0.8,
                             ),
                           ),
-                          SizedBox(height: isDesktop ? 12 : 8),
+                          SizedBox(
+                            height: isDesktop
+                                ? SpacingConstants.spacingMD
+                                : SpacingConstants.spacingSM,
+                          ),
                           Text(
                             edu.degree,
                             style: TextStyle(
@@ -377,7 +391,11 @@ class AboutSection extends StatelessWidget {
                               letterSpacing: -0.3,
                             ),
                           ),
-                          SizedBox(height: isDesktop ? 8 : 6),
+                          SizedBox(
+                            height: isDesktop
+                                ? SpacingConstants.spacingSM
+                                : SpacingConstants.spacingXS,
+                          ),
                           Text(
                             edu.institution,
                             style: TextStyle(
@@ -397,13 +415,21 @@ class AboutSection extends StatelessWidget {
                   ],
                 ),
                 if (index < data.education.length - 1) ...[
-                  SizedBox(height: isDesktop ? 24 : 20),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacing2XL
+                        : SpacingConstants.spacingXL,
+                  ),
                   Divider(
                     height: 1,
                     thickness: 1,
                     color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
-                  SizedBox(height: isDesktop ? 24 : 20),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacing2XL
+                        : SpacingConstants.spacingXL,
+                  ),
                 ],
               ],
             );
@@ -416,10 +442,10 @@ class AboutSection extends StatelessWidget {
   Widget _buildExperienceCard(BuildContext context, Experience exp) {
     return RepaintBoundary(
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: SpacingConstants.getCardPadding(context),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
           border: Border.all(
             color: Theme.of(context).dividerColor.withOpacity(0.1),
             width: 1,
@@ -464,13 +490,15 @@ class AboutSection extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SpacingConstants.spacingLG,
+                    vertical: SpacingConstants.spacingXL - 2,
                   ),
                   decoration: BoxDecoration(
                     color: AppConstants.primaryColor.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(
+                      SpacingConstants.spacingXL - 2,
+                    ),
                     border: Border.all(
                       color: AppConstants.primaryColor.withOpacity(0.2),
                     ),
@@ -487,19 +515,27 @@ class AboutSection extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 28),
+            SizedBox(
+              height: SpacingConstants.spacing3XL - SpacingConstants.spacingXS,
+            ),
             Column(
               children: List.generate(
                 exp.responsibilities.length,
                 (i) => Padding(
                   padding: EdgeInsets.only(
-                    bottom: i < exp.responsibilities.length - 1 ? 14 : 0,
+                    bottom: i < exp.responsibilities.length - 1
+                        ? SpacingConstants.spacingMD +
+                              SpacingConstants.spacingXS
+                        : 0,
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 7, right: 16),
+                        padding: EdgeInsets.only(
+                          top: 7,
+                          right: SpacingConstants.spacingLG,
+                        ),
                         child: Container(
                           width: 6,
                           height: 6,

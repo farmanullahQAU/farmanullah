@@ -46,20 +46,18 @@ class _ExperienceSectionState extends State<ExperienceSection> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 64 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 100 : 80,
-      ),
+      padding: SpacingConstants.getSectionPadding(context),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1300),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,8 +65,8 @@ class _ExperienceSectionState extends State<ExperienceSection> {
               Row(
                 children: [
                   Container(
-                    width: 4,
-                    height: isDesktop ? 50 : 40,
+                    width: SpacingConstants.sectionHeaderBarWidth,
+                    height: SpacingConstants.getSectionHeaderBarHeight(context),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -79,25 +77,21 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
                   Text(
                     widget.sectionTitle.toUpperCase(),
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ],
               ),
-              // const SizedBox(height: 48),
-
-              // // Decorative divider below title
-              // const SectionDivider(),
-              const SizedBox(height: 48),
+              SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Experience Card Slider
               Stack(
                 clipBehavior: Clip.none,
                 children: [
                   SizedBox(
-                    height: isDesktop ? 500 : 450,
+                    height: isDesktop ? 500 : 500,
                     child: PageView.builder(
                       controller: _pageController,
                       physics: const ClampingScrollPhysics(),
@@ -107,7 +101,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                           key: ValueKey('experience_$index'),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                              horizontal: isDesktop ? 12 : 8,
+                              horizontal: isDesktop
+                                  ? SpacingConstants.spacingMD
+                                  : SpacingConstants.spacingSM,
                             ),
                             child: _buildModernExperienceCard(
                               context,
@@ -154,7 +150,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                               }
                             },
                             iconSize: 32,
-                            padding: const EdgeInsets.all(12),
+                            padding: EdgeInsets.all(SpacingConstants.spacingMD),
                           ),
                         ),
                       ),
@@ -195,7 +191,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                                     );
                                   },
                                   iconSize: 32,
-                                  padding: const EdgeInsets.all(12),
+                                  padding: EdgeInsets.all(
+                                    SpacingConstants.spacingMD,
+                                  ),
                                 ),
                               )
                             : const SizedBox(),
@@ -205,7 +203,12 @@ class _ExperienceSectionState extends State<ExperienceSection> {
               ),
               // Navigation Dots
               Padding(
-                padding: EdgeInsets.only(top: isDesktop ? 32 : 24, bottom: 16),
+                padding: EdgeInsets.only(
+                  top: isDesktop
+                      ? SpacingConstants.spacing3XL
+                      : SpacingConstants.spacing2XL,
+                  bottom: SpacingConstants.spacingLG,
+                ),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -221,14 +224,20 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          width: _currentPage == index ? 24 : 12,
-                          height: 12,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: SpacingConstants.spacingXS + 2,
+                          ),
+                          width: _currentPage == index
+                              ? SpacingConstants.spacing2XL
+                              : SpacingConstants.spacingMD,
+                          height: SpacingConstants.spacingMD,
                           decoration: BoxDecoration(
                             color: _currentPage == index
                                 ? AppConstants.primaryColor
                                 : AppConstants.primaryColor.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(
+                              SpacingConstants.spacingXS + 2,
+                            ),
                           ),
                         ),
                       ),
@@ -251,7 +260,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusXL),
         // border: Border.all(
         //   color: AppConstants.primaryColor.withOpacity(0.1),
         //   width: 1.5,
@@ -268,7 +277,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
         color: Colors.transparent,
         child: Container(
           child: Padding(
-            padding: EdgeInsets.all(isDesktop ? 32 : 24),
+            padding: SpacingConstants.getCardPadding(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -278,7 +287,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                   children: [
                     // Icon
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(SpacingConstants.spacingMD),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -286,7 +295,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                             AppConstants.secondaryColor.withOpacity(0.15),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                          SpacingConstants.spacingMD,
+                        ),
                       ),
                       child: Icon(
                         Icons.business_rounded,
@@ -294,7 +305,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                         size: isDesktop ? 28 : 24,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: SpacingConstants.spacingLG),
 
                     // Title and Company
                     Expanded(
@@ -325,8 +336,12 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                     // Period Badge
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isDesktop ? 16 : 12,
-                        vertical: isDesktop ? 10 : 8,
+                        horizontal: isDesktop
+                            ? SpacingConstants.spacingLG
+                            : SpacingConstants.spacingMD,
+                        vertical: isDesktop
+                            ? SpacingConstants.spacingXL - 2
+                            : SpacingConstants.spacingSM,
                       ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -335,7 +350,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                             AppConstants.secondaryColor.withOpacity(0.1),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(
+                          SpacingConstants.spacingXL - 2,
+                        ),
                         border: Border.all(
                           color: AppConstants.primaryColor.withOpacity(0.2),
                         ),
@@ -353,7 +370,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: SpacingConstants.spacing2XL),
 
                 // Divider
                 Container(
@@ -368,18 +385,23 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: SpacingConstants.spacingXL),
 
                 // Responsibilities
                 Column(
                   children: exp.responsibilities.take(4).map((responsibility) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
+                      padding: EdgeInsets.only(
+                        bottom: SpacingConstants.spacingMD,
+                      ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 6, right: 12),
+                            padding: EdgeInsets.only(
+                              top: SpacingConstants.spacingXS + 2,
+                              right: SpacingConstants.spacingMD,
+                            ),
                             child: Icon(
                               Icons.check_circle_rounded,
                               size: isDesktop ? 20 : 18,

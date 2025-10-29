@@ -49,26 +49,31 @@ class _PortfolioSectionState extends State<PortfolioSection> {
     final isDesktop = MediaQuery.of(context).size.width > 768;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: isDesktop ? 32 : 24,
-        horizontal: isDesktop ? 0 : 16,
-      ),
+      padding: SpacingConstants.getPortfolioPadding(context),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1300),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: isDesktop ? 24 : 8),
+                padding: EdgeInsets.symmetric(
+                  horizontal: isDesktop
+                      ? SpacingConstants.spacing2XL
+                      : SpacingConstants.spacingSM,
+                ),
                 child: Row(
                   children: [
                     Container(
-                      width: 4,
-                      height: 40,
+                      width: SpacingConstants.sectionHeaderBarWidth,
+                      height: SpacingConstants.getSectionHeaderBarHeight(
+                        context,
+                      ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -79,7 +84,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
                     Text(
                       widget.sectionTitle.toUpperCase(),
                       style: Theme.of(context).textTheme.displaySmall,
@@ -87,9 +92,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                   ],
                 ),
               ),
-              SizedBox(height: 48),
-              // HeaderDivider(isDesktop: isDesktop),
-              // SizedBox(height: isDesktop ? 48 : 32),
+              SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
               Stack(
                 clipBehavior: Clip.none,
 
@@ -107,7 +110,9 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                           key: ValueKey('project_$index'),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                              horizontal: isDesktop ? 12 : 8,
+                              horizontal: isDesktop
+                                  ? SpacingConstants.spacingMD
+                                  : SpacingConstants.spacingSM,
                             ),
                             child: _buildProjectCard(
                               context,
@@ -207,7 +212,12 @@ class _PortfolioSectionState extends State<PortfolioSection> {
               ),
               // Navigation Dots
               Padding(
-                padding: EdgeInsets.only(top: isDesktop ? 32 : 24, bottom: 16),
+                padding: EdgeInsets.only(
+                  top: isDesktop
+                      ? SpacingConstants.spacing3XL
+                      : SpacingConstants.spacing2XL,
+                  bottom: SpacingConstants.spacingLG,
+                ),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -223,14 +233,20 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          width: _currentPage == index ? 24 : 12,
-                          height: 12,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: SpacingConstants.spacingXS + 2,
+                          ),
+                          width: _currentPage == index
+                              ? SpacingConstants.spacing2XL
+                              : SpacingConstants.spacingMD,
+                          height: SpacingConstants.spacingMD,
                           decoration: BoxDecoration(
                             color: _currentPage == index
                                 ? AppConstants.primaryColor
                                 : AppConstants.primaryColor.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(
+                              SpacingConstants.spacingXS + 2,
+                            ),
                           ),
                         ),
                       ),
@@ -253,7 +269,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).shadowColor.withOpacity(0.1),
@@ -272,7 +288,7 @@ class _PortfolioSectionState extends State<PortfolioSection> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(isDesktop ? 24 : 16),
+            padding: SpacingConstants.getCardPadding(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -285,7 +301,11 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: isDesktop ? 12 : 8),
+                SizedBox(
+                  height: isDesktop
+                      ? SpacingConstants.spacingMD
+                      : SpacingConstants.spacingSM,
+                ),
                 Text(
                   project.description,
                   maxLines: isDesktop ? 3 : 2,
@@ -299,19 +319,29 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                   ),
                 ),
                 if (project.technologies.isNotEmpty) ...[
-                  SizedBox(height: isDesktop ? 16 : 12),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacingLG
+                        : SpacingConstants.spacingMD,
+                  ),
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
                     children: project.technologies.take(5).map((tech) {
                       return Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: isDesktop ? 10 : 8,
-                          vertical: isDesktop ? 5 : 4,
+                          horizontal: isDesktop
+                              ? SpacingConstants.spacingXL - 2
+                              : SpacingConstants.spacingSM,
+                          vertical: isDesktop
+                              ? SpacingConstants.spacingXS + 1
+                              : SpacingConstants.spacingXS,
                         ),
                         decoration: BoxDecoration(
                           color: AppConstants.primaryColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(
+                            SpacingConstants.spacingXS + 2,
+                          ),
                         ),
                         child: Text(
                           tech,
@@ -327,7 +357,11 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                 ],
                 // Store Badges
                 if (project.playStoreUrl != null) ...[
-                  SizedBox(height: isDesktop ? 16 : 12),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacingLG
+                        : SpacingConstants.spacingMD,
+                  ),
                   StoreBadges(playStoreUrl: project.playStoreUrl),
                 ],
               ],

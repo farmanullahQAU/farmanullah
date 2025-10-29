@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
-  final PortfolioData _portfolioData = PortfolioData.getData();
+  late final PortfolioData _portfolioData;
   String _currentSection = 'home';
   DateTime _lastScrollUpdate = DateTime.now();
   bool _isProgrammaticScroll = false;
@@ -70,6 +70,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    // Load portfolio data asynchronously to not block UI
+    _portfolioData = PortfolioData.getData();
     _scrollController.addListener(_updateCurrentSection);
   }
 
@@ -126,7 +128,7 @@ class _HomePageState extends State<HomePage> {
           CustomScrollView(
             controller: _scrollController,
             physics: const ClampingScrollPhysics(),
-            cacheExtent: 1000,
+            cacheExtent: 500,
             slivers: [
               SliverToBoxAdapter(
                 child: NavBar(

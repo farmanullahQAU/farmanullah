@@ -15,19 +15,17 @@ class ServicesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 64 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 100 : 80,
-      ),
+      padding: SpacingConstants.getSectionPadding(context),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1300),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -35,8 +33,8 @@ class ServicesSection extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    width: 4,
-                    height: isDesktop ? 50 : 40,
+                    width: SpacingConstants.sectionHeaderBarWidth,
+                    height: SpacingConstants.getSectionHeaderBarHeight(context),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -47,18 +45,14 @@ class ServicesSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
                   Text(
                     sectionTitle.toUpperCase(),
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ],
               ),
-
-              // const SizedBox(height: 48),
-              // // Decorative divider below title (matches experience)
-              // HeaderDivider(isDesktop: isDesktop),
-              const SizedBox(height: 48),
+              SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Services Grid - Same as before but with new card design
               if (isDesktop && services.length >= 6)
@@ -73,7 +67,9 @@ class ServicesSection extends StatelessWidget {
                             isDesktop,
                           ),
                         ),
-                        const SizedBox(width: 24),
+                        SizedBox(
+                          width: SpacingConstants.getCardSpacing(context),
+                        ),
                         Expanded(
                           child: _buildExperienceStyleCard(
                             context,
@@ -81,7 +77,9 @@ class ServicesSection extends StatelessWidget {
                             isDesktop,
                           ),
                         ),
-                        const SizedBox(width: 24),
+                        SizedBox(
+                          width: SpacingConstants.getCardSpacing(context),
+                        ),
                         Expanded(
                           child: _buildExperienceStyleCard(
                             context,
@@ -91,7 +89,7 @@ class ServicesSection extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: SpacingConstants.getCardSpacing(context)),
                     Row(
                       children: [
                         Expanded(
@@ -101,7 +99,9 @@ class ServicesSection extends StatelessWidget {
                             isDesktop,
                           ),
                         ),
-                        const SizedBox(width: 24),
+                        SizedBox(
+                          width: SpacingConstants.getCardSpacing(context),
+                        ),
                         Expanded(
                           child: _buildExperienceStyleCard(
                             context,
@@ -109,7 +109,9 @@ class ServicesSection extends StatelessWidget {
                             isDesktop,
                           ),
                         ),
-                        const SizedBox(width: 24),
+                        SizedBox(
+                          width: SpacingConstants.getCardSpacing(context),
+                        ),
                         Expanded(
                           child: _buildExperienceStyleCard(
                             context,
@@ -123,8 +125,8 @@ class ServicesSection extends StatelessWidget {
                 )
               else if (isDesktop)
                 Wrap(
-                  spacing: 24,
-                  runSpacing: 24,
+                  spacing: SpacingConstants.getCardSpacing(context),
+                  runSpacing: SpacingConstants.getCardSpacing(context),
                   children: services.map((service) {
                     return SizedBox(
                       width: (MediaQuery.of(context).size.width - 128 - 48) / 3,
@@ -140,11 +142,16 @@ class ServicesSection extends StatelessWidget {
                 Column(
                   children: services.map((service) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: _buildExperienceStyleCard(
-                        context,
-                        service,
-                        isDesktop,
+                      padding: EdgeInsets.only(
+                        bottom: SpacingConstants.getCardSpacing(context),
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: _buildExperienceStyleCard(
+                          context,
+                          service,
+                          isDesktop,
+                        ),
                       ),
                     );
                   }).toList(),
@@ -163,9 +170,11 @@ class ServicesSection extends StatelessWidget {
   ) {
     return RepaintBoundary(
       child: Container(
+        width: double.infinity,
+        constraints: BoxConstraints(minHeight: isDesktop ? 200 : 180),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusXL),
           border: Border.all(
             color: AppConstants.primaryColor.withOpacity(0.1),
             width: 1.5,
@@ -181,16 +190,21 @@ class ServicesSection extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(
+              SpacingConstants.borderRadiusXL,
+            ),
             onTap: () {},
             child: Padding(
-              padding: EdgeInsets.all(isDesktop ? 32 : 28),
+              padding: SpacingConstants.getCardPaddingSmall(context),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Icon with gradient background
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: EdgeInsets.all(
+                      SpacingConstants.iconContainerPadding,
+                    ),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -198,7 +212,9 @@ class ServicesSection extends StatelessWidget {
                           AppConstants.secondaryColor.withOpacity(0.15),
                         ],
                       ),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(
+                        SpacingConstants.borderRadiusLG,
+                      ),
                     ),
                     child: Icon(
                       service.icon,
@@ -206,7 +222,11 @@ class ServicesSection extends StatelessWidget {
                       size: isDesktop ? 32 : 28,
                     ),
                   ),
-                  SizedBox(height: isDesktop ? 24 : 20),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacing2XL
+                        : SpacingConstants.spacingXL,
+                  ),
 
                   // Title
                   Text(
@@ -217,7 +237,7 @@ class ServicesSection extends StatelessWidget {
                       letterSpacing: -0.3,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: SpacingConstants.spacingMD),
 
                   // Description
                   Text(
@@ -231,6 +251,8 @@ class ServicesSection extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       letterSpacing: 0.2,
                     ),
+                    maxLines: isDesktop ? null : 4,
+                    overflow: isDesktop ? null : TextOverflow.ellipsis,
                   ),
                 ],
               ),

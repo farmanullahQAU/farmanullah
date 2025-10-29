@@ -27,20 +27,19 @@ class HomeSection extends StatelessWidget {
     final isDesktop = screenWidth > 768;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 48 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 50 : 30,
-      ),
+      padding: SpacingConstants.getHomePadding(context),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Mobile Profile Image
               if (!isDesktop) ...[
                 _buildMobileProfileImage(context, screenWidth),
-                const SizedBox(height: 32),
+                SizedBox(height: SpacingConstants.spacing3XL),
               ],
 
               // Main Content Row/Column
@@ -54,29 +53,37 @@ class HomeSection extends StatelessWidget {
                           : CrossAxisAlignment.center,
                       children: [
                         _buildGreeting(context, isDesktop, screenWidth),
-                        const SizedBox(height: 16),
+                        SizedBox(height: SpacingConstants.spacingLG),
                         _buildName(context, isDesktop, screenWidth),
-                        const SizedBox(height: 16),
+                        SizedBox(height: SpacingConstants.spacingLG),
                         _buildTitle(context, isDesktop, screenWidth),
-                        SizedBox(height: isDesktop ? 16 : 8),
+                        SizedBox(
+                          height: isDesktop
+                              ? SpacingConstants.spacingLG
+                              : SpacingConstants.spacingSM,
+                        ),
                         _buildBio(context, isDesktop, screenWidth),
-                        SizedBox(height: isDesktop ? 32 : 32),
+                        SizedBox(height: SpacingConstants.spacing3XL),
                         _buildActionButtons(context, isDesktop, screenWidth),
-                        SizedBox(height: isDesktop ? 16 : 8),
+                        SizedBox(
+                          height: isDesktop
+                              ? SpacingConstants.spacingLG
+                              : SpacingConstants.spacingSM,
+                        ),
                       ],
                     ),
                   ),
 
                   // Desktop Profile Image
                   if (isDesktop) ...[
-                    const SizedBox(width: 60),
+                    SizedBox(width: SpacingConstants.spacing6XL),
                     _buildDesktopProfileImage(),
                   ],
                 ],
               ),
 
               // Education Card - moved below for better mobile layout
-              if (isDesktop) const SizedBox(height: 32),
+              if (isDesktop) SizedBox(height: SpacingConstants.spacing3XL),
               _buildEducationCard(context, isDesktop),
             ],
           ),
@@ -108,8 +115,8 @@ class HomeSection extends StatelessWidget {
         child: Image.asset(
           data.profileImagePath,
           fit: BoxFit.cover,
-          // cacheWidth: 400,
-          // cacheHeight: 400,
+          cacheWidth: 400,
+          cacheHeight: 400,
           errorBuilder: (context, error, stackTrace) {
             return Container(
               color: AppConstants.primaryColor.withOpacity(0.1),
@@ -123,7 +130,7 @@ class HomeSection extends StatelessWidget {
 
   Widget _buildDesktopProfileImage() {
     return Container(
-      width: 350,
+      width: 400,
       height: 400,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -142,8 +149,8 @@ class HomeSection extends StatelessWidget {
         child: Image.asset(
           data.profileImagePath,
           fit: BoxFit.cover,
-          // cacheWidth: 400,
-          // cacheHeight: 400,
+          cacheWidth: 400,
+          cacheHeight: 400,
           errorBuilder: (context, error, stackTrace) {
             return Container(
               color: AppConstants.primaryColor.withOpacity(0.1),
@@ -241,10 +248,10 @@ class HomeSection extends StatelessWidget {
   Widget _buildEducationCard(BuildContext context, bool isDesktop) {
     return RepaintBoundary(
       child: Container(
-        padding: EdgeInsets.all(isDesktop ? 32 : 24),
+        padding: SpacingConstants.getCardPadding(context),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
           border: Border.all(
             color: Theme.of(context).dividerColor.withOpacity(0.1),
             width: 1,
@@ -266,7 +273,7 @@ class HomeSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 4,
+                      width: SpacingConstants.sectionHeaderBarWidth,
                       height: isDesktop ? 80 : 70,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -280,7 +287,11 @@ class HomeSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    SizedBox(width: isDesktop ? 24 : 16),
+                    SizedBox(
+                      width: isDesktop
+                          ? SpacingConstants.spacing2XL
+                          : SpacingConstants.spacingLG,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,7 +305,11 @@ class HomeSection extends StatelessWidget {
                               letterSpacing: 0.8,
                             ),
                           ),
-                          SizedBox(height: isDesktop ? 12 : 8),
+                          SizedBox(
+                            height: isDesktop
+                                ? SpacingConstants.spacingMD
+                                : SpacingConstants.spacingSM,
+                          ),
                           Text(
                             edu.degree,
                             style: TextStyle(
@@ -303,7 +318,11 @@ class HomeSection extends StatelessWidget {
                               letterSpacing: -0.3,
                             ),
                           ),
-                          SizedBox(height: isDesktop ? 8 : 6),
+                          SizedBox(
+                            height: isDesktop
+                                ? SpacingConstants.spacingSM
+                                : SpacingConstants.spacingXS,
+                          ),
                           Text(
                             edu.institution,
                             style: TextStyle(
@@ -323,13 +342,21 @@ class HomeSection extends StatelessWidget {
                   ],
                 ),
                 if (index < data.education.length - 1) ...[
-                  SizedBox(height: isDesktop ? 24 : 20),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacing2XL
+                        : SpacingConstants.spacingXL,
+                  ),
                   Divider(
                     height: 1,
                     thickness: 1,
                     color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
-                  SizedBox(height: isDesktop ? 24 : 20),
+                  SizedBox(
+                    height: isDesktop
+                        ? SpacingConstants.spacing2XL
+                        : SpacingConstants.spacingXL,
+                  ),
                 ],
               ],
             );

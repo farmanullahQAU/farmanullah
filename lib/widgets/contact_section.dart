@@ -14,22 +14,21 @@ class ContactSection extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 48 : (screenWidth > 400 ? 24 : 16),
-        vertical: isDesktop ? 100 : 80,
-      ),
+      padding: SpacingConstants.getSectionPadding(context),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor.withOpacity(0.3),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1300),
+          constraints: const BoxConstraints(
+            maxWidth: SpacingConstants.maxContentWidth,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Modern Hero Text
               _buildHeroText(context, isDesktop, screenWidth),
-              const SizedBox(height: 12),
+              SizedBox(height: SpacingConstants.spacingMD),
 
               // Subtitle
               Text(
@@ -37,9 +36,7 @@ class ContactSection extends StatelessWidget {
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              SizedBox(height: 48),
-              // HeaderDivider(isDesktop: isDesktop),
-              // SizedBox(height: isDesktop ? 60 : 48),
+              SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Contact Cards Grid
               if (isDesktop)
@@ -55,7 +52,7 @@ class ContactSection extends StatelessWidget {
                         () => _launchEmail(data.email),
                       ),
                     ),
-                    const SizedBox(width: 24),
+                    SizedBox(width: SpacingConstants.getCardSpacing(context)),
                     Expanded(
                       child: _buildModernContactCard(
                         context,
@@ -66,7 +63,7 @@ class ContactSection extends StatelessWidget {
                         () => _launchPhone(data.phone),
                       ),
                     ),
-                    const SizedBox(width: 24),
+                    SizedBox(width: SpacingConstants.getCardSpacing(context)),
                     Expanded(
                       child: _buildModernContactCard(
                         context,
@@ -90,7 +87,7 @@ class ContactSection extends StatelessWidget {
                       data.email,
                       () => _launchEmail(data.email),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: SpacingConstants.spacingXL),
                     _buildModernContactCard(
                       context,
                       'Phone',
@@ -99,7 +96,7 @@ class ContactSection extends StatelessWidget {
                       data.phone,
                       () => _launchPhone(data.phone),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: SpacingConstants.spacingXL),
                     _buildModernContactCard(
                       context,
                       'LinkedIn',
@@ -111,7 +108,11 @@ class ContactSection extends StatelessWidget {
                   ],
                 ),
 
-              SizedBox(height: isDesktop ? 60 : 48),
+              SizedBox(
+                height: isDesktop
+                    ? SpacingConstants.spacing6XL
+                    : SpacingConstants.sectionHeaderBottomSpacing,
+              ),
 
               // CTA Button
               _buildCTAButton(context, isDesktop, screenWidth),
@@ -130,34 +131,27 @@ class ContactSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: isDesktop ? 0 : 8),
-          child: Row(
-            children: [
-              Container(
-                width: 4,
-                height: 40,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppConstants.primaryColor,
-                      AppConstants.secondaryColor,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(2),
+        Row(
+          children: [
+            Container(
+              width: SpacingConstants.sectionHeaderBarWidth,
+              height: SpacingConstants.getSectionHeaderBarHeight(context),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppConstants.primaryColor,
+                    AppConstants.secondaryColor,
+                  ],
                 ),
+                borderRadius: BorderRadius.circular(2),
               ),
-              const SizedBox(width: 16),
-              Text(
-                data.uiContent.sectionTitles['contact']!,
-                style: TextStyle(
-                  fontSize: isDesktop ? 42 : 32,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -0.5,
-                ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
+            Text(
+              data.uiContent.sectionTitles['contact']!.toUpperCase(),
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
+          ],
         ),
       ],
     );
@@ -178,12 +172,14 @@ class ContactSection extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadius2XL),
           child: Container(
-            padding: EdgeInsets.all(isDesktop ? 32 : 28),
+            padding: SpacingConstants.getCardPaddingSmall(context),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(
+                SpacingConstants.borderRadius2XL,
+              ),
               border: Border.all(
                 color: AppConstants.primaryColor.withOpacity(0.1),
                 width: 1.5,
@@ -201,7 +197,9 @@ class ContactSection extends StatelessWidget {
               children: [
                 // Icon with gradient background
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: EdgeInsets.all(
+                    SpacingConstants.iconContainerPadding,
+                  ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -209,7 +207,9 @@ class ContactSection extends StatelessWidget {
                         AppConstants.secondaryColor.withOpacity(0.15),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(
+                      SpacingConstants.borderRadiusLG,
+                    ),
                   ),
                   child: Icon(
                     icon,
@@ -217,7 +217,11 @@ class ContactSection extends StatelessWidget {
                     size: isDesktop ? 32 : 28,
                   ),
                 ),
-                SizedBox(height: isDesktop ? 24 : 20),
+                SizedBox(
+                  height: isDesktop
+                      ? SpacingConstants.spacing2XL
+                      : SpacingConstants.spacingXL,
+                ),
 
                 // Title
                 Text(
@@ -229,7 +233,7 @@ class ContactSection extends StatelessWidget {
                     letterSpacing: 1.2,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: SpacingConstants.spacingSM),
 
                 // Value
                 Text(
@@ -240,7 +244,7 @@ class ContactSection extends StatelessWidget {
                     height: 1.4,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: SpacingConstants.spacingLG),
 
                 // Action indicator
                 Row(
@@ -255,7 +259,7 @@ class ContactSection extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: SpacingConstants.spacingSM),
                     Icon(
                       Icons.arrow_forward_rounded,
                       size: 16,
@@ -282,17 +286,23 @@ class ContactSection extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => _launchEmail(data.email),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? 48 : 32,
-            vertical: isDesktop ? 20 : 18,
+            horizontal: isDesktop
+                ? SpacingConstants.spacing5XL
+                : SpacingConstants.spacing3XL,
+            vertical: isDesktop
+                ? SpacingConstants.spacingXL
+                : SpacingConstants.spacingXL - 2,
           ),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [AppConstants.primaryColor, AppConstants.secondaryColor],
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(
+              SpacingConstants.borderRadiusLG,
+            ),
             boxShadow: [
               BoxShadow(
                 color: AppConstants.primaryColor.withOpacity(0.3),
@@ -307,9 +317,11 @@ class ContactSection extends StatelessWidget {
               Icon(
                 Icons.send_rounded,
                 color: Colors.white,
-                size: isDesktop ? 24 : 22,
+                size: isDesktop
+                    ? SpacingConstants.spacing2XL
+                    : SpacingConstants.spacingXL + 2,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: SpacingConstants.spacingMD),
               Text(
                 data.uiContent.contactCTA,
                 style: TextStyle(
