@@ -32,19 +32,41 @@ class MyApp extends StatelessWidget {
       themeMode: themeController.themeMode,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppConstants.primaryColor,
-          brightness: Brightness.light,
-        ),
+        colorScheme:
+            ColorScheme.fromSeed(
+              seedColor: AppConstants.primaryColor,
+              brightness: Brightness.light,
+            ).copyWith(
+              primary: AppConstants.primaryColor,
+              secondary: AppConstants.accentColor,
+              tertiary: AppConstants.secondaryColor,
+              primaryContainer: AppConstants.primaryColor.withValues(
+                alpha: 0.12,
+              ),
+              secondaryContainer: AppConstants.accentColor.withValues(
+                alpha: 0.12,
+              ),
+            ),
         scaffoldBackgroundColor: AppConstants.lightBackground,
         cardColor: AppConstants.lightCard,
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppConstants.primaryColor,
-          brightness: Brightness.dark,
-        ),
+        colorScheme:
+            ColorScheme.fromSeed(
+              seedColor: AppConstants.primaryColor,
+              brightness: Brightness.dark,
+            ).copyWith(
+              primary: AppConstants.primaryColor,
+              secondary: AppConstants.accentColor,
+              tertiary: AppConstants.secondaryColor,
+              primaryContainer: AppConstants.primaryColor.withValues(
+                alpha: 0.18,
+              ),
+              secondaryContainer: AppConstants.accentColor.withValues(
+                alpha: 0.18,
+              ),
+            ),
         scaffoldBackgroundColor: AppConstants.darkBackground,
         cardColor: AppConstants.darkCard,
       ),

@@ -1,94 +1,134 @@
 import 'package:farmanullah/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class HeaderDivider extends StatelessWidget {
+class HeaderDivider extends StatefulWidget {
   final bool isDesktop;
+  final String? label;
 
-  const HeaderDivider({super.key, this.isDesktop = true});
+  const HeaderDivider({super.key, this.isDesktop = true, this.label});
+
+  @override
+  State<HeaderDivider> createState() => _HeaderDividerState();
+}
+
+class _HeaderDividerState extends State<HeaderDivider>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _widthAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+
+    _widthAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.3,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: widget.isDesktop ? 60 : 40,
+        horizontal: MediaQuery.of(context).size.width * 0.1,
       ),
-      padding: EdgeInsets.symmetric(vertical: 40),
-
-      // margin: isDesktop
-      //     ? const EdgeInsets.symmetric(horizontal: 200, vertical: 40)
-      //     : const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-      child: Row(
+      child: Column(
         children: [
-          // Start bubble
-          Container(
-            width: isDesktop ? 12 : 10,
-            height: isDesktop ? 12 : 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppConstants.primaryColor,
-              border: Border.all(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                width: isDesktop ? 3 : 2,
+          // Optional label above divider
+          if (widget.label != null) ...[
+            Text(
+              widget.label!,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                letterSpacing: 3,
+                color: AppConstants.primaryColor.withOpacity(0.7),
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          // Left gradient line
-          Expanded(
-            child: Container(
-              height: 2,
-              margin: const EdgeInsets.symmetric(horizontal: 6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppConstants.primaryColor.withOpacity(0.3),
-                    AppConstants.primaryColor.withOpacity(0.1),
-                    Colors.transparent,
+            SizedBox(height: widget.isDesktop ? 20 : 12),
+          ],
+          // Modern divider with animation
+          AnimatedBuilder(
+            animation: _widthAnimation,
+            builder: (context, child) {
+              return SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Left accent line
+                    Flexible(
+                      child: Container(
+                        height: 2,
+                        margin: EdgeInsets.only(
+                          right: widget.isDesktop ? 20 : 12,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.transparent,
+                              AppConstants.primaryColor.withOpacity(0.5),
+                              AppConstants.primaryColor,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    // Center icon/dot
+                    ScaleTransition(
+                      scale: _widthAnimation,
+                      child: Container(
+                        width: widget.isDesktop ? 16 : 12,
+                        height: widget.isDesktop ? 16 : 12,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppConstants.primaryColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppConstants.primaryColor.withOpacity(0.4),
+                              blurRadius: 12,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Right accent line
+                    Flexible(
+                      child: Container(
+                        height: 2,
+                        margin: EdgeInsets.only(
+                          left: widget.isDesktop ? 20 : 12,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppConstants.secondaryColor,
+                              AppConstants.secondaryColor.withOpacity(0.5),
+                              Colors.transparent,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ),
-          ),
-          // Middle dot
-          Container(
-            width: isDesktop ? 10 : 8,
-            height: isDesktop ? 10 : 8,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppConstants.primaryColor.withOpacity(0.6),
-              border: Border.all(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                width: isDesktop ? 2 : 1.5,
-              ),
-            ),
-          ),
-          // Right gradient line
-          Expanded(
-            child: Container(
-              height: 2,
-              margin: const EdgeInsets.symmetric(horizontal: 6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    AppConstants.secondaryColor.withOpacity(0.1),
-                    AppConstants.secondaryColor.withOpacity(0.3),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          // End bubble
-          Container(
-            width: isDesktop ? 12 : 10,
-            height: isDesktop ? 12 : 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppConstants.secondaryColor,
-              border: Border.all(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                width: isDesktop ? 3 : 2,
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),
