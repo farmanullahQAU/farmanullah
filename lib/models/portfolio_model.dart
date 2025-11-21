@@ -304,7 +304,9 @@ class PortfolioData {
             'assets/images/projects/artnie_5.png',
           ],
           playStoreUrl:
-              'https://play.google.com/store/apps/details?id=com.Artnie.app&pcampaignid=web_share', // Update with actual URL if different
+              'https://play.google.com/store/apps/details?id=com.inkkaro.app&pcampaignid=web_share',
+
+          // Update with actual URL if different
         ),
         Project(
           name: 'BitNasdaq (crypto currency exchange)',
