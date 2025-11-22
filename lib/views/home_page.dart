@@ -175,6 +175,9 @@ class _HomePageState extends State<HomePage> {
                   experiences: _portfolioData.experiences,
                   sectionTitle:
                       _portfolioData.uiContent.sectionTitles['experience']!,
+                  sectionDescription: _portfolioData
+                      .uiContent
+                      .sectionDescriptions['experience'],
                 ),
               ),
               const SliverToBoxAdapter(child: HeaderDivider()),
@@ -184,6 +187,8 @@ class _HomePageState extends State<HomePage> {
                   services: _portfolioData.services,
                   sectionTitle:
                       _portfolioData.uiContent.sectionTitles['services']!,
+                  sectionDescription:
+                      _portfolioData.uiContent.sectionDescriptions['services'],
                 ),
               ),
               // const SliverToBoxAdapter(child: SectionDivider()),
@@ -195,6 +200,8 @@ class _HomePageState extends State<HomePage> {
                   skills: _portfolioData.skills,
                   sectionTitle:
                       _portfolioData.uiContent.sectionTitles['skills']!,
+                  sectionDescription:
+                      _portfolioData.uiContent.sectionDescriptions['skills'],
                 ),
               ),
               const SliverToBoxAdapter(child: HeaderDivider()),
@@ -205,6 +212,8 @@ class _HomePageState extends State<HomePage> {
                   projects: _portfolioData.projects,
                   sectionTitle:
                       _portfolioData.uiContent.sectionTitles['portfolio']!,
+                  sectionDescription:
+                      _portfolioData.uiContent.sectionDescriptions['portfolio'],
                 ),
               ),
               const SliverToBoxAdapter(child: HeaderDivider()),

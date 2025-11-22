@@ -33,12 +33,6 @@ class ContactSection extends StatelessWidget {
               _buildHeroText(context, isDesktop, screenWidth),
               SizedBox(height: SpacingConstants.spacingMD),
 
-              // Subtitle
-              Text(
-                data.uiContent.contactSubtitle.toUpperCase(),
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Contact Cards Grid
@@ -134,7 +128,10 @@ class ContactSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: data.uiContent.sectionTitles['contact']!),
+        SectionHeader(
+          title: data.uiContent.sectionTitles['contact']!,
+          description: data.uiContent.sectionDescriptions['contact'],
+        ),
       ],
     );
   }

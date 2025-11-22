@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class ExperienceSection extends StatefulWidget {
   final List<Experience> experiences;
   final String sectionTitle;
+  final String? sectionDescription;
 
   const ExperienceSection({
     super.key,
     required this.experiences,
     required this.sectionTitle,
+    this.sectionDescription,
   });
 
   @override
@@ -64,7 +66,10 @@ class _ExperienceSectionState extends State<ExperienceSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Title Section
-              SectionHeader(title: widget.sectionTitle),
+              SectionHeader(
+                title: widget.sectionTitle,
+                description: widget.sectionDescription,
+              ),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Experience Card Slider

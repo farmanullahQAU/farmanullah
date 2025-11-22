@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 class SkillsSection extends StatelessWidget {
   final List<Skill> skills;
   final String sectionTitle;
+  final String? sectionDescription;
 
   const SkillsSection({
     super.key,
     required this.skills,
     required this.sectionTitle,
+    this.sectionDescription,
   });
 
   @override
@@ -30,7 +32,10 @@ class SkillsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SectionHeader(title: sectionTitle),
+              SectionHeader(
+                title: sectionTitle,
+                description: sectionDescription,
+              ),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
               if (isDesktop && skills.length >= 3)
                 IntrinsicHeight(

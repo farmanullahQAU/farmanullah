@@ -65,6 +65,7 @@ class UIContent {
   final String contactCTA;
   final String footerText;
   final Map<String, String> sectionTitles;
+  final Map<String, String> sectionDescriptions;
   final Map<String, String> buttonLabels;
   final Map<String, String> navigationLabels;
 
@@ -76,6 +77,7 @@ class UIContent {
     required this.contactCTA,
     required this.footerText,
     required this.sectionTitles,
+    required this.sectionDescriptions,
     required this.buttonLabels,
     required this.navigationLabels,
   });
@@ -89,6 +91,7 @@ class PortfolioData {
   final String linkedIn;
   final String bio;
   final String cvUrl;
+  final String experienceLetterUrl;
   final String profileImagePath;
   final List<Experience> experiences;
   final List<Skill> skills;
@@ -105,6 +108,7 @@ class PortfolioData {
     required this.linkedIn,
     required this.bio,
     required this.cvUrl,
+    required this.experienceLetterUrl,
     required this.profileImagePath,
     required this.experiences,
     required this.skills,
@@ -123,6 +127,8 @@ class PortfolioData {
       linkedIn: 'farman4',
       cvUrl:
           'https://drive.google.com/file/d/18oHzH6hxA-Y6AiT0ivAmHKTov1YT7out/view?usp=sharing',
+      experienceLetterUrl:
+          'https://drive.google.com/file/d/195usQQGjvCt0lV4CZq6Rh3jKzHDM7KjG/view?usp=drive_link',
       profileImagePath: 'assets/images/projects/me.jpeg',
       bio:
           'Senior Flutter Developer with 4+ years of experience delivering production-grade Android/iOS apps. Specialized in Flutter, Firebase, REST/WebSocket, and state management (GetX, Riverpod, Bloc). Built and shipped scalable features including authentication, real-time data, payments, and monetization (AdMob, IAP). Hands-on with AI/Web3 integrations (Web3 Dart, MetaMask, Solidity). Strong in clean architecture, performance optimization, CI/CD, and full release lifecycle to Play Store and App Store.',
@@ -157,6 +163,20 @@ class PortfolioData {
           'portfolio': 'Projects',
           'contact': 'Get in touch',
           'education': 'Education',
+        },
+        sectionDescriptions: {
+          'about':
+              'Get to know me better - my background, education, and passion for technology.',
+          'experience':
+              'A journey through my professional career and the companies I\'ve worked with.',
+          'services':
+              'Comprehensive solutions I offer to help bring your digital ideas to life.',
+          'skills':
+              'Technologies and tools I master to build exceptional mobile applications.',
+          'portfolio':
+              'Showcase of my recent projects and applications I\'ve developed.',
+          'contact':
+              'Let\'s connect and discuss how we can work together on your next project.',
         },
         buttonLabels: {
           'downloadCV': 'Download My CV',
@@ -211,16 +231,17 @@ class PortfolioData {
       ],
       experiences: [
         Experience(
-          title: 'Senior Flutter Developer',
+          title: 'Flutter Developer',
           company: 'DigitalCode · Islamabad',
-          period: '2021 – 2024',
+          period: 'August 2022 – September 2025',
           responsibilities: [
+            'Contributed to an emerging cryptocurrency exchange and wallet application, delivering core trading and wallet functionality as part of the development team.',
             'Delivered crypto exchange & wallet features (KYC, P2P, spot trading) using Flutter + WebSocket; improved data sync latency by ~35%.',
             'Built responsive Material 3 UI with custom animations; increased session duration by 22%.',
             'Integrated REST APIs with robust error handling, retry logic, and token auth.',
             'Implemented secure chat (AWS Amplify + DynamoDB) and push notifications.',
             'Led QA support and release readiness; reduced crash-free sessions issues to <0.5%.',
-            'Developed and maintained multiple production apps over 3 years; contributed to architecture decisions and best practices.',
+            'Maintained multiple production apps over 3 years; contributed to architecture decisions and best practices.',
           ],
         ),
         Experience(
@@ -238,7 +259,7 @@ class PortfolioData {
         Experience(
           title: 'Junior Flutter Developer',
           company: 'Esols Technologies · Islamabad',
-          period: '2020 – 2021',
+          period: '2021 – 2022',
           responsibilities: [
             'Shipped 2 cross-platform apps to Play Store/App Store; adhered to release and store policies.',
             'Used GetX for routing, DI, and state; standardized module structure to speed feature dev by ~20%.',

@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 class ServicesSection extends StatelessWidget {
   final List<Service> services;
   final String sectionTitle;
+  final String? sectionDescription;
 
   const ServicesSection({
     super.key,
     required this.services,
     required this.sectionTitle,
+    this.sectionDescription,
   });
 
   @override
@@ -31,7 +33,10 @@ class ServicesSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Hero Title
-              SectionHeader(title: sectionTitle),
+              SectionHeader(
+                title: sectionTitle,
+                description: sectionDescription,
+              ),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
 
               // Services Grid - Same as before but with new card design

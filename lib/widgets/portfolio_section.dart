@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 class PortfolioSection extends StatefulWidget {
   final List<Project> projects;
   final String sectionTitle;
+  final String? sectionDescription;
 
   const PortfolioSection({
     super.key,
     required this.projects,
     required this.sectionTitle,
+    this.sectionDescription,
   });
 
   @override
@@ -68,7 +70,10 @@ class _PortfolioSectionState extends State<PortfolioSection> {
                       ? SpacingConstants.spacing2XL
                       : SpacingConstants.spacingSM,
                 ),
-                child: SectionHeader(title: widget.sectionTitle),
+                child: SectionHeader(
+                  title: widget.sectionTitle,
+                  description: widget.sectionDescription,
+                ),
               ),
               SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
               Stack(

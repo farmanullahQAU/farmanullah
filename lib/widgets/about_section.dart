@@ -44,6 +44,7 @@ class AboutSection extends StatelessWidget {
                     child: _buildSectionHeader(
                       context,
                       data.uiContent.sectionTitles['about']!,
+                      data.uiContent.sectionDescriptions['about'],
                     ),
                   ),
                   // CV Download Button
@@ -192,6 +193,7 @@ class AboutSection extends StatelessWidget {
               _buildSectionHeader(
                 context,
                 data.uiContent.sectionTitles['education']!,
+                null,
               ),
               SizedBox(height: SpacingConstants.spacing4XL),
               _buildEducationCard(context),
@@ -202,6 +204,7 @@ class AboutSection extends StatelessWidget {
               _buildSectionHeader(
                 context,
                 data.uiContent.sectionTitles['experience']!,
+                data.uiContent.sectionDescriptions['experience'],
               ),
               SizedBox(height: SpacingConstants.spacing4XL),
 
@@ -222,7 +225,11 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title) {
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    String? description,
+  ) {
     final isDesktop = MediaQuery.of(context).size.width > 768;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -237,6 +244,18 @@ class AboutSection extends StatelessWidget {
             letterSpacing: -0.5,
           ),
         ),
+        if (description != null) ...[
+          SizedBox(height: SpacingConstants.spacingMD),
+          Text(
+            description,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+              fontSize: isDesktop ? 16 : 14,
+            ),
+          ),
+        ],
         SizedBox(height: SpacingConstants.spacingMD),
         Container(
           height: 4,
