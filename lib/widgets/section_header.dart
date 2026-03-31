@@ -1,7 +1,7 @@
 import 'package:farmanullah/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-/// Reusable section header widget with vertical gradient divider
 class SectionHeader extends StatelessWidget {
   final String title;
   final String? description;
@@ -11,49 +11,55 @@ class SectionHeader extends StatelessWidget {
     super.key,
     required this.title,
     this.description,
-    this.forceUppercase = true,
+    this.forceUppercase = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 768;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Eyebrow label
         Row(
           children: [
-            Container(
-              width: SpacingConstants.sectionHeaderBarWidth,
-              height: SpacingConstants.getSectionHeaderBarHeight(context),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppConstants.primaryColor, AppConstants.accentColor],
+            ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [AppConstants.primaryColor, AppConstants.accentColor],
+              ).createShader(bounds),
+              child: Text(
+                '// ${forceUppercase ? title.toUpperCase() : title.toUpperCase()}',
+                style: GoogleFonts.inter(
+                  fontSize: isDesktop ? 13 : 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 3,
+                  color: Colors.white,
                 ),
-                borderRadius: BorderRadius.circular(2),
               ),
-            ),
-            SizedBox(width: SpacingConstants.sectionHeaderBarSpacing),
-            Text(
-              forceUppercase ? title.toUpperCase() : title,
-              style: Theme.of(context).textTheme.displaySmall,
             ),
           ],
         ),
+        const SizedBox(height: 12),
+        // Main title
+        Text(
+          forceUppercase ? title.toUpperCase() : title,
+          style:
+              (isDesktop
+                      ? Theme.of(context).textTheme.displaySmall
+                      : Theme.of(context).textTheme.headlineMedium)
+                  ?.copyWith(letterSpacing: -0.5),
+        ),
         if (description != null) ...[
-          SizedBox(height: SpacingConstants.spacingMD),
-          Padding(
-            padding: EdgeInsets.only(
-              left:
-                  SpacingConstants.sectionHeaderBarWidth +
-                  SpacingConstants.sectionHeaderBarSpacing,
-            ),
-            child: Text(
-              description!,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.color?.withOpacity(0.7),
-                fontSize: MediaQuery.of(context).size.width > 768 ? 16 : 14,
-              ),
+          const SizedBox(height: 12),
+          Text(
+            description!,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: isDark
+                  ? AppConstants.darkTextSecondary
+                  : AppConstants.lightTextSecondary,
+              fontSize: isDesktop ? 17 : 15,
             ),
           ),
         ],

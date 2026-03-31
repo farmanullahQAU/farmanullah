@@ -44,13 +44,13 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor.withOpacity(0.5),
+        color: Theme.of(context).cardColor.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Icon(
         Icons.image_outlined,
         size: 60,
-        color: Theme.of(context).primaryColor.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
       ),
     );
   }
@@ -185,7 +185,7 @@ class _CarouselModalState extends State<_CarouselModal> {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(color: Colors.black.withOpacity(0.95)),
+        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.95)),
         child: Stack(
           children: [
             // Close button
@@ -210,7 +210,7 @@ class _CarouselModalState extends State<_CarouselModal> {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -287,7 +287,7 @@ class _CarouselModalState extends State<_CarouselModal> {
                       decoration: BoxDecoration(
                         color: _currentIndex == index
                             ? Colors.white
-                            : Colors.white.withOpacity(0.4),
+                            : Colors.white.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),

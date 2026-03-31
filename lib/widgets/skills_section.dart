@@ -2,8 +2,10 @@ import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
 import 'package:farmanullah/widgets/section_header.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-class SkillsSection extends StatelessWidget {
+class SkillsSection extends StatefulWidget {
   final List<Skill> skills;
   final String sectionTitle;
   final String? sectionDescription;
@@ -16,125 +18,242 @@ class SkillsSection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final isDesktop = MediaQuery.of(context).size.width > 768;
+  State<SkillsSection> createState() => _SkillsSectionState();
+}
 
-    return Container(
-      padding: SpacingConstants.getSectionPadding(context),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor.withOpacity(0.3),
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: SpacingConstants.maxContentWidth,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SectionHeader(
-                title: sectionTitle,
-                description: sectionDescription,
+class _SkillsSectionState extends State<SkillsSection>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animController;
+  late Animation<double> _fadeIn;
+  bool _animatedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _fadeIn = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
+
+  void _onVisible(VisibilityInfo info) {
+    if (info.visibleFraction > 0.01 && !_animatedIn && mounted) {
+      setState(() => _animatedIn = true);
+      _animController.forward();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return VisibilityDetector(
+      key: const Key('skills-section'),
+      onVisibilityChanged: _onVisible,
+      child: FadeTransition(
+        opacity: _fadeIn,
+        child: Container(
+          padding: SpacingConstants.getSectionPadding(context),
+          color: isDark ? const Color(0xFF0A0917) : const Color(0xFFF0EEFF),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: SpacingConstants.maxContentWidth,
               ),
-              SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
-              if (isDesktop && skills.length >= 3)
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(child: _buildSkillCard(context, skills[0])),
-                      SizedBox(width: SpacingConstants.getCardSpacing(context)),
-                      Expanded(child: _buildSkillCard(context, skills[1])),
-                      SizedBox(width: SpacingConstants.getCardSpacing(context)),
-                      Expanded(child: _buildSkillCard(context, skills[2])),
-                    ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionHeader(
+                    title: widget.sectionTitle,
+                    description: widget.sectionDescription,
                   ),
-                )
-              else
-                Column(
-                  children: skills.map((skill) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: SpacingConstants.getCardSpacing(context),
-                      ),
-                      child: _buildSkillCard(context, skill),
-                    );
-                  }).toList(),
-                ),
-            ],
+                  SizedBox(height: SpacingConstants.sectionHeaderBottomSpacing),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = constraints.maxWidth;
+                      int columns = width > 950 ? 3 : (width > 600 ? 2 : 1);
+                      double spacing = SpacingConstants.getCardSpacing(context);
+
+                      List<Widget> rows = [];
+                      for (int i = 0; i < widget.skills.length; i += columns) {
+                        List<Widget> rowChildren = [];
+                        for (int j = 0; j < columns; j++) {
+                          if (i + j < widget.skills.length) {
+                            rowChildren.add(
+                              columns == 1
+                                  ? _buildSkillCard(
+                                      context,
+                                      widget.skills[i + j],
+                                      isDark,
+                                    )
+                                  : Expanded(
+                                      child: _buildSkillCard(
+                                        context,
+                                        widget.skills[i + j],
+                                        isDark,
+                                      ),
+                                    ),
+                            );
+                          } else {
+                            rowChildren.add(
+                              const Expanded(child: SizedBox.shrink()),
+                            );
+                          }
+                          if (j < columns - 1) {
+                            rowChildren.add(SizedBox(width: spacing));
+                          }
+                        }
+                        rows.add(
+                          columns == 1
+                              ? rowChildren[0]
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: rowChildren,
+                                ),
+                        );
+                        if (i + columns < widget.skills.length) {
+                          rows.add(SizedBox(height: spacing));
+                        }
+                      }
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: rows,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSkillCard(BuildContext context, Skill skill) {
+  Widget _buildSkillCard(BuildContext context, Skill skill, bool isDark) {
     return RepaintBoundary(
       child: Container(
         padding: SpacingConstants.getCardPadding(context),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
+          color: isDark ? AppConstants.darkCard : AppConstants.lightCard,
+          borderRadius: BorderRadius.circular(SpacingConstants.borderRadius2XL),
+          border: Border.all(
+            color: AppConstants.primaryColor.withValues(
+              alpha: isDark ? 0.15 : 0.1,
+            ),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: AppConstants.primaryColor.withValues(
+                alpha: isDark ? 0.08 : 0.05,
+              ),
+              blurRadius: 28,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            // Category header
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: SpacingConstants.spacingMD,
-                vertical: SpacingConstants.spacingXS + 2,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppConstants.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(
-                  SpacingConstants.borderRadiusSM,
+                gradient: LinearGradient(
+                  colors: [
+                    AppConstants.primaryColor.withValues(alpha: 0.15),
+                    AppConstants.accentColor.withValues(alpha: 0.1),
+                  ],
                 ),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 skill.category,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
                   color: AppConstants.primaryColor,
+                  letterSpacing: 0.5,
                 ),
               ),
             ),
-            SizedBox(height: SpacingConstants.spacingLG),
-            ...skill.items.map(
-              (item) => Padding(
-                padding: EdgeInsets.only(bottom: SpacingConstants.spacingSM),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle,
-                      size: SpacingConstants.spacingLG,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    SizedBox(width: SpacingConstants.spacingMD),
-                    Expanded(
-                      child: Text(
-                        item,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+            const SizedBox(height: 20),
+            // Skills as tags/chips
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return Wrap(
+                  spacing: 8,
+                  runSpacing: 10,
+                  children: skill.items
+                      .map(
+                        (item) => _buildSkillChip(
+                          context,
+                          item,
+                          isDark,
+                          constraints.maxWidth,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                      )
+                      .toList(),
+                );
+              },
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSkillChip(
+    BuildContext context,
+    String item,
+    bool isDark,
+    double maxWidth,
+  ) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppConstants.primaryColor.withValues(alpha: 0.08)
+            : AppConstants.primaryColor.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppConstants.primaryColor.withValues(
+            alpha: isDark ? 0.2 : 0.15,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 5,
+            height: 5,
+            decoration: const BoxDecoration(
+              color: AppConstants.primaryColor,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 7),
+          Flexible(
+            child: Text(
+              item,
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: isDark ? AppConstants.darkText : AppConstants.lightText,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

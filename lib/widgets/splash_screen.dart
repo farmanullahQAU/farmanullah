@@ -122,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen>
                         (isDark
                                 ? AppConstants.darkTextSecondary
                                 : AppConstants.lightTextSecondary)
-                            .withOpacity(0.8),
+                            .withValues(alpha: 0.8),
                   ),
                 ),
                 const SizedBox(height: 48),

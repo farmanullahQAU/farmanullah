@@ -27,8 +27,8 @@ class GradientIconContainer extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppConstants.primaryColor.withOpacity(opacity),
-            AppConstants.secondaryColor.withOpacity(opacity),
+            AppConstants.primaryColor.withValues(alpha: opacity),
+            AppConstants.secondaryColor.withValues(alpha: opacity),
           ],
         ),
         borderRadius: BorderRadius.circular(

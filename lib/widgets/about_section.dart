@@ -88,7 +88,7 @@ class AboutSection extends StatelessWidget {
                     height: 1.8,
                     color: Theme.of(
                       context,
-                    ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                    ).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.2,
                   ),
@@ -251,7 +251,7 @@ class AboutSection extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+              ).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
               fontSize: isDesktop ? 16 : 14,
             ),
           ),
@@ -283,12 +283,12 @@ class AboutSection extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.04),
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 2),
           ),
@@ -313,7 +313,7 @@ class AboutSection extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.color?.withOpacity(0.5),
+              ).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
               letterSpacing: 1,
               textBaseline: TextBaseline.ideographic,
             ),
@@ -343,12 +343,12 @@ class AboutSection extends StatelessWidget {
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
           border: Border.all(
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor.withOpacity(0.04),
+              color: Theme.of(context).shadowColor.withValues(alpha: 0.04),
               blurRadius: 12,
               offset: const Offset(0, 2),
             ),
@@ -419,7 +419,7 @@ class AboutSection extends StatelessWidget {
                               fontSize: isDesktop ? 15 : 14,
                               color: Theme.of(
                                 context,
-                              ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                              ).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.3,
                             ),
@@ -440,7 +440,7 @@ class AboutSection extends StatelessWidget {
                   Divider(
                     height: 1,
                     thickness: 1,
-                    color: Theme.of(context).dividerColor.withOpacity(0.1),
+                    color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
                   ),
                   SizedBox(
                     height: isDesktop
@@ -464,12 +464,12 @@ class AboutSection extends StatelessWidget {
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(SpacingConstants.borderRadiusLG),
           border: Border.all(
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor.withOpacity(0.04),
+              color: Theme.of(context).shadowColor.withValues(alpha: 0.04),
               blurRadius: 12,
               offset: const Offset(0, 2),
             ),
@@ -512,12 +512,12 @@ class AboutSection extends StatelessWidget {
                     vertical: SpacingConstants.spacingXL - 2,
                   ),
                   decoration: BoxDecoration(
-                    color: AppConstants.primaryColor.withOpacity(0.08),
+                    color: AppConstants.primaryColor.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(
                       SpacingConstants.spacingXL - 2,
                     ),
                     border: Border.all(
-                      color: AppConstants.primaryColor.withOpacity(0.2),
+                      color: AppConstants.primaryColor.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(
@@ -571,7 +571,7 @@ class AboutSection extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                             color: Theme.of(
                               context,
-                            ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                            ).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                             letterSpacing: 0.2,
                           ),
                         ),

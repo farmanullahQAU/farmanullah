@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  // Branding color palette based on #9112BC
-  static const Color primaryColor = Color(0xFF9112BC); // Brand purple
-  static const Color secondaryColor = Color(0xFF7A0FA0); // Deep purple
-  static const Color accentColor = Color(0xFFA835D1); // Light purple accent
-  static const Color redColor = Color.fromARGB(255, 110, 11, 24); // Dark purple
+  // Premium deep dark color system
+  static const Color primaryColor = Color(0xFF9B40F8); // Vibrant violet
+  static const Color secondaryColor = Color(0xFF6C2BD9); // Deep violet
+  static const Color accentColor = Color(0xFFBB6BFF); // Light violet accent
+  static const Color neonAccent = Color(0xFF00E5FF); // Cyan neon accent
+  static const Color redColor = Color(0xFFFF3B6B); // Coral red
 
-  // Light theme colors
-  static const Color lightBackground = Color(0xFFF8FAFC);
+  // Light theme
+  static const Color lightBackground = Color(0xFFF5F4FF);
   static const Color lightCard = Color(0xFFFFFFFF);
-  static const Color lightText = Color(0xFF1E293B);
-  static const Color lightTextSecondary = Color(0xFF64748B);
+  static const Color lightText = Color(0xFF120D26);
+  static const Color lightTextSecondary = Color(0xFF5A5478);
 
-  // Dark theme colors
-  static const Color darkBackground = Color(0xFF0F172A);
-  static const Color darkCard = Color(0xFF1E293B);
-  static const Color darkText = Color(0xFFF8FAFC);
-  static const Color darkTextSecondary = Color(0xFFCBD5E1);
+  // Dark theme — high contrast dark
+  static const Color darkBackground = Color(0xFF07060F);
+  static const Color darkCard = Color(0xFF0F0D1E);
+  static const Color darkSurface = Color(0xFF171530);
+  static const Color darkText = Color(0xFFF0EEFF);
+  static const Color darkTextSecondary = Color(0xFF9D96C4);
 
   // Section IDs
   static const String home = 'home';
@@ -30,31 +32,26 @@ class AppConstants {
 }
 
 class SpacingConstants {
-  // Maximum content width across all sections
-  static const double maxContentWidth = 1300;
+  static const double maxContentWidth = 1280;
 
-  // Section container padding
-  static double sectionPaddingHorizontalDesktop = 64;
+  static double sectionPaddingHorizontalDesktop = 80;
   static double sectionPaddingHorizontalMobile = 24;
   static double sectionPaddingHorizontalMobileSmall = 16;
   static double sectionPaddingVerticalDesktop = 100;
-  static double sectionPaddingVerticalMobile = 80;
+  static double sectionPaddingVerticalMobile = 72;
 
-  // Special section paddings (can be overridden if needed)
-  static double homePaddingVerticalDesktop = 50;
-  static double homePaddingVerticalMobile = 30;
+  static double homePaddingVerticalDesktop = 60;
+  static double homePaddingVerticalMobile = 40;
   static double aboutPaddingVerticalDesktop = 120;
-  static double portfolioPaddingVerticalDesktop = 32;
+  static double portfolioPaddingVerticalDesktop = 40;
   static double portfolioPaddingVerticalMobile = 24;
 
-  // Section header spacing
-  static double sectionHeaderBarHeightDesktop = 33;
-  static double sectionHeaderBarHeightMobile = 40;
-  static double sectionHeaderBarWidth = 6;
-  static double sectionHeaderBarSpacing = 16;
-  static double sectionHeaderBottomSpacing = 48;
+  static double sectionHeaderBarHeightDesktop = 36;
+  static double sectionHeaderBarHeightMobile = 36;
+  static double sectionHeaderBarWidth = 4;
+  static double sectionHeaderBarSpacing = 14;
+  static double sectionHeaderBottomSpacing = 56;
 
-  // Content spacing
   static double spacingXS = 4;
   static double spacingSM = 8;
   static double spacingMD = 12;
@@ -68,27 +65,22 @@ class SpacingConstants {
   static double spacing7XL = 80;
   static double spacing8XL = 100;
 
-  // Card padding
   static double cardPaddingDesktop = 32;
   static double cardPaddingMobile = 24;
   static double cardPaddingSmall = 20;
 
-  // Card spacing (between cards)
   static double cardSpacingDesktop = 24;
-  static double cardSpacingMobile = 20;
+  static double cardSpacingMobile = 16;
 
-  // Border radius
   static double borderRadiusSM = 8;
   static double borderRadiusMD = 12;
   static double borderRadiusLG = 16;
   static double borderRadiusXL = 20;
-  static double borderRadius2XL = 24;
+  static double borderRadius2XL = 28;
 
-  // Icon container padding
   static double iconContainerPadding = 14;
   static double iconContainerPaddingSmall = 10;
 
-  // Helper methods for responsive spacing
   static EdgeInsets getSectionPadding(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 768;
@@ -145,7 +137,9 @@ class SpacingConstants {
     final isDesktop = screenWidth > 768;
 
     return EdgeInsets.symmetric(
-      horizontal: isDesktop ? 0 : sectionPaddingHorizontalMobileSmall,
+      horizontal: isDesktop
+          ? sectionPaddingHorizontalDesktop
+          : sectionPaddingHorizontalMobileSmall,
       vertical: isDesktop
           ? portfolioPaddingVerticalDesktop
           : portfolioPaddingVerticalMobile,

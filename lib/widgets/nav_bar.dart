@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:farmanullah/controllers/theme_controller.dart';
 import 'package:farmanullah/models/portfolio_model.dart';
 import 'package:farmanullah/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NavBar extends StatefulWidget {
   final PortfolioData? data;
@@ -30,212 +33,218 @@ class NavBar extends StatefulWidget {
   State<NavBar> createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar> {
+class _NavBarState extends State<NavBar> with SingleTickerProviderStateMixin {
   bool _isMenuOpen = false;
+  late AnimationController _menuController;
+  late Animation<double> _menuAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _menuController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 280),
+    );
+    _menuAnimation = CurvedAnimation(
+      parent: _menuController,
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
+  void dispose() {
+    _menuController.dispose();
+    super.dispose();
+  }
 
   void _handleNavTap(VoidCallback? onTap) {
     if (onTap != null) {
       onTap();
-      // Close menu after a brief delay for smooth UX
       Future.delayed(const Duration(milliseconds: 200), () {
         if (mounted) {
           setState(() => _isMenuOpen = false);
+          _menuController.reverse();
         }
       });
+    }
+  }
+
+  void _toggleMenu() {
+    setState(() => _isMenuOpen = !_isMenuOpen);
+    if (_isMenuOpen) {
+      _menuController.forward();
+    } else {
+      _menuController.reverse();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth <= 1000;
-    final themeController = Get.find<ThemeController>();
+    final isMobile = screenWidth <= 768;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Main navbar bar
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 20,
-                offset: const Offset(0, 4),
+        // Glass blur navbar
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+            child: Container(
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF07060F).withValues(alpha: 0.75)
+                    : Colors.white.withValues(alpha: 0.80),
+                border: Border(
+                  bottom: BorderSide(
+                    color: isDark
+                        ? AppConstants.primaryColor.withValues(alpha: 0.12)
+                        : AppConstants.primaryColor.withValues(alpha: 0.08),
+                    width: 1,
+                  ),
+                ),
               ),
-            ],
-          ),
-          child: SafeArea(
-            bottom: false,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 20 : 40,
-                vertical: isMobile ? 16 : 20,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildLogo(),
-                  if (!isMobile) ...[
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 18 : 48,
+                    vertical: isMobile ? 14 : 18,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildLogo(),
+                      if (!isMobile) ...[
+                        Expanded(
+                          child: Center(
+                            child: Wrap(
+                              spacing: 4,
+                              children: [
+                                _buildNavItem(
+                                  context,
+                                  'Home',
+                                  AppConstants.home,
+                                  widget.onHome,
+                                ),
+                                _buildNavItem(
+                                  context,
+                                  'Experience',
+                                  AppConstants.experience,
+                                  widget.onExperience,
+                                ),
+                                _buildNavItem(
+                                  context,
+                                  'Services',
+                                  AppConstants.services,
+                                  widget.onServices,
+                                ),
+                                _buildNavItem(
+                                  context,
+                                  'Skills',
+                                  AppConstants.skills,
+                                  widget.onSkills,
+                                ),
+                                _buildNavItem(
+                                  context,
+                                  'Projects',
+                                  AppConstants.portfolio,
+                                  widget.onPortfolio,
+                                ),
+                                _buildNavItem(
+                                  context,
+                                  'Contact',
+                                  AppConstants.contact,
+                                  widget.onContact,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildNavItem(
-                            context,
-                            widget.data?.uiContent.navigationLabels['home'] ??
-                                'Home',
-                            AppConstants.home,
-                            widget.onHome,
-                          ),
-                          const SizedBox(width: 32),
-                          _buildNavItem(
-                            context,
-                            widget
-                                    .data
-                                    ?.uiContent
-                                    .navigationLabels['experience'] ??
-                                'Experience',
-                            AppConstants.experience,
-                            widget.onExperience,
-                          ),
-                          const SizedBox(width: 32),
-                          _buildNavItem(
-                            context,
-                            widget
-                                    .data
-                                    ?.uiContent
-                                    .navigationLabels['services'] ??
-                                'Services',
-                            AppConstants.services,
-                            widget.onServices,
-                          ),
-                          const SizedBox(width: 32),
-                          _buildNavItem(
-                            context,
-                            widget.data?.uiContent.navigationLabels['skills'] ??
-                                'Skills',
-                            AppConstants.skills,
-                            widget.onSkills,
-                          ),
-                          const SizedBox(width: 32),
-                          _buildNavItem(
-                            context,
-                            widget
-                                    .data
-                                    ?.uiContent
-                                    .navigationLabels['portfolio'] ??
-                                'Portfolio',
-                            AppConstants.portfolio,
-                            widget.onPortfolio,
-                          ),
-                          const SizedBox(width: 32),
-                          _buildNavItem(
-                            context,
-                            widget
-                                    .data
-                                    ?.uiContent
-                                    .navigationLabels['contact'] ??
-                                'Contact',
-                            AppConstants.contact,
-                            widget.onContact,
-                          ),
+                          _buildThemeToggle(context),
+                          if (isMobile) ...[
+                            const SizedBox(width: 10),
+                            _buildMobileMenuBtn(context),
+                          ],
                         ],
                       ),
-                    ),
-                  ],
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildThemeToggle(context, themeController),
-                      if (isMobile) ...[
-                        const SizedBox(width: 12),
-                        _buildMobileMenuButton(context),
-                      ],
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
         ),
 
-        // Mobile Menu - smooth expand/collapse
+        // Mobile dropdown menu
         if (isMobile)
-          AnimatedSize(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            child: _isMenuOpen
-                ? Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      border: Border(
-                        top: BorderSide(
-                          color: Theme.of(
-                            context,
-                          ).dividerColor.withOpacity(0.1),
-                        ),
+          SizeTransition(
+            sizeFactor: _menuAnimation,
+            axisAlignment: -1,
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? const Color(0xFF0F0D1E).withValues(alpha: 0.92)
+                        : Colors.white.withValues(alpha: 0.95),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: AppConstants.primaryColor.withValues(alpha: 0.1),
+                        width: 1,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
                     child: Column(
                       children: [
-                        const SizedBox(height: 12),
                         _buildMobileNavItem(
-                          widget.data?.uiContent.navigationLabels['home'] ??
-                              'Home',
+                          'Home',
                           AppConstants.home,
                           () => _handleNavTap(widget.onHome),
                         ),
                         _buildMobileNavItem(
-                          widget
-                                  .data
-                                  ?.uiContent
-                                  .navigationLabels['experience'] ??
-                              'Experience',
+                          'Experience',
                           AppConstants.experience,
                           () => _handleNavTap(widget.onExperience),
                         ),
                         _buildMobileNavItem(
-                          widget.data?.uiContent.navigationLabels['services'] ??
-                              'Services',
+                          'Services',
                           AppConstants.services,
                           () => _handleNavTap(widget.onServices),
                         ),
                         _buildMobileNavItem(
-                          widget.data?.uiContent.navigationLabels['skills'] ??
-                              'Skills',
+                          'Skills',
                           AppConstants.skills,
                           () => _handleNavTap(widget.onSkills),
                         ),
                         _buildMobileNavItem(
-                          widget
-                                  .data
-                                  ?.uiContent
-                                  .navigationLabels['portfolio'] ??
-                              'Portfolio',
+                          'Projects',
                           AppConstants.portfolio,
                           () => _handleNavTap(widget.onPortfolio),
                         ),
                         _buildMobileNavItem(
-                          widget.data?.uiContent.navigationLabels['contact'] ??
-                              'Contact',
+                          'Contact',
                           AppConstants.contact,
                           () => _handleNavTap(widget.onContact),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 8),
                       ],
                     ),
-                  )
-                : const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            ),
           ),
       ],
     );
@@ -244,16 +253,24 @@ class _NavBarState extends State<NavBar> {
   Widget _buildLogo() {
     return GestureDetector(
       onTap: widget.onHome,
-      child: Text(
-        widget.data?.name ?? 'FARMAN ULLAH',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w900,
-          letterSpacing: 2,
-          foreground: Paint()
-            ..shader = LinearGradient(
-              colors: [AppConstants.primaryColor, AppConstants.secondaryColor],
-            ).createShader(const Rect.fromLTWH(0, 0, 200, 100)),
+      child: ShaderMask(
+        shaderCallback: (bounds) => const LinearGradient(
+          colors: [
+            AppConstants.primaryColor,
+            AppConstants.accentColor,
+            AppConstants.neonAccent,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ).createShader(bounds),
+        child: Text(
+          'Farman Ullah',
+          style: GoogleFonts.inter(
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+            letterSpacing: -0.5,
+          ),
         ),
       ),
     );
@@ -267,116 +284,144 @@ class _NavBarState extends State<NavBar> {
   ) {
     final isActive = widget.currentSection == section;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      hoverColor: AppConstants.primaryColor.withOpacity(0.1),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive ? AppConstants.primaryColor.withOpacity(0.15) : null,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+          decoration: BoxDecoration(
             color: isActive
-                ? AppConstants.primaryColor
-                : Theme.of(context).textTheme.bodyMedium?.color,
+                ? AppConstants.primaryColor.withValues(alpha: 0.12)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+              color: isActive
+                  ? AppConstants.primaryColor
+                  : Theme.of(context).textTheme.bodyMedium?.color,
+              letterSpacing: 0.1,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildThemeToggle(
-    BuildContext context,
-    ThemeController themeController,
-  ) {
+  Widget _buildThemeToggle(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
     return Obx(
-      () => Container(
+      () => AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(12),
+          color: Theme.of(context).cardColor.withValues(alpha: 0.6),
+          shape: BoxShape.circle,
           border: Border.all(
-            color: Theme.of(context).dividerColor.withOpacity(0.1),
+            color: AppConstants.primaryColor.withValues(alpha: 0.2),
           ),
         ),
         child: IconButton(
-          icon: Icon(
-            themeController.isDarkMode.value
-                ? Icons.light_mode_rounded
-                : Icons.dark_mode_rounded,
-            size: 20,
+          icon: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: Icon(
+              themeController.isDarkMode.value
+                  ? Icons.light_mode_rounded
+                  : Icons.dark_mode_rounded,
+              key: ValueKey(themeController.isDarkMode.value),
+              size: 20,
+            ),
           ),
           onPressed: themeController.toggleTheme,
           tooltip: themeController.isDarkMode.value
               ? 'Light Mode'
               : 'Dark Mode',
-          splashRadius: 24,
         ),
       ),
     );
   }
 
-  Widget _buildMobileMenuButton(BuildContext context) {
-    return Container(
+  Widget _buildMobileMenuBtn(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).cardColor.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: AppConstants.primaryColor.withValues(alpha: 0.2),
         ),
       ),
       child: IconButton(
-        icon: Icon(_isMenuOpen ? Icons.close : Icons.menu_rounded, size: 22),
-        onPressed: () => setState(() => _isMenuOpen = !_isMenuOpen),
-        splashRadius: 24,
+        icon: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: Icon(
+            _isMenuOpen ? Icons.close_rounded : Icons.menu_rounded,
+            key: ValueKey(_isMenuOpen),
+            size: 22,
+          ),
+        ),
+        onPressed: _toggleMenu,
       ),
     );
   }
 
   Widget _buildMobileNavItem(String label, String section, VoidCallback onTap) {
     final isActive = widget.currentSection == section;
-
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          color: isActive
-              ? AppConstants.primaryColor.withOpacity(0.12)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: isActive
-              ? Border.all(color: AppConstants.primaryColor.withOpacity(0.3))
-              : null,
-        ),
-        child: Row(
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive
-                    ? AppConstants.primaryColor
-                    : Theme.of(context).textTheme.bodyMedium?.color,
-                letterSpacing: 0.3,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      margin: const EdgeInsets.symmetric(vertical: 3),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          decoration: BoxDecoration(
+            color: isActive
+                ? AppConstants.primaryColor.withValues(alpha: 0.12)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: isActive
+                ? Border.all(
+                    color: AppConstants.primaryColor.withValues(alpha: 0.25),
+                  )
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 3,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? AppConstants.primaryColor
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            const Spacer(),
-            if (isActive)
-              Icon(
-                Icons.check_circle_rounded,
-                size: 20,
-                color: AppConstants.primaryColor,
+              const SizedBox(width: 12),
+              Text(
+                label,
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                  color: isActive
+                      ? AppConstants.primaryColor
+                      : Theme.of(context).textTheme.bodyMedium?.color,
+                ),
               ),
-          ],
+              const Spacer(),
+              if (isActive)
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 14,
+                  color: AppConstants.primaryColor,
+                ),
+            ],
+          ),
         ),
       ),
     );
