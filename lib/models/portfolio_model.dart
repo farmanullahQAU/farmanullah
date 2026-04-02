@@ -129,7 +129,7 @@ class PortfolioData {
           'https://drive.google.com/file/d/18oHzH6hxA-Y6AiT0ivAmHKTov1YT7out/view?usp=sharing',
       experienceLetterUrl:
           'https://drive.google.com/file/d/195usQQGjvCt0lV4CZq6Rh3jKzHDM7KjG/view?usp=drive_link',
-      profileImagePath: 'assets/images/projects/me.jpeg',
+      profileImagePath: 'assets/images/projects/me.jpg',
       bio:
           'Senior Flutter Developer with 4+ years of experience delivering production-grade Android/iOS apps. Specialized in Flutter, Firebase, REST/WebSocket, and state management (GetX, Riverpod, Bloc). Built and shipped scalable features including authentication, real-time data, payments, and monetization (AdMob, IAP). Hands-on with AI/Web3 integrations (Web3 Dart, MetaMask, Solidity). Strong in clean architecture, performance optimization, CI/CD, and full release lifecycle to Play Store and App Store.',
       education: [
