@@ -91,14 +91,21 @@ class _ServicesSectionState extends State<ServicesSection>
                         for (int j = 0; j < columns; j++) {
                           if (i + j < widget.services.length) {
                             rowChildren.add(
-                              Expanded(
-                                child: _buildCard(
-                                  context,
-                                  widget.services[i + j],
-                                  width > 768,
-                                  isDark,
-                                ),
-                              ),
+                              columns == 1
+                                  ? _buildCard(
+                                      context,
+                                      widget.services[i + j],
+                                      width > 768,
+                                      isDark,
+                                    )
+                                  : Expanded(
+                                      child: _buildCard(
+                                        context,
+                                        widget.services[i + j],
+                                        width > 768,
+                                        isDark,
+                                      ),
+                                    ),
                             );
                           } else {
                             rowChildren.add(
@@ -110,18 +117,25 @@ class _ServicesSectionState extends State<ServicesSection>
                           }
                         }
                         rows.add(
-                          IntrinsicHeight(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: rowChildren,
-                            ),
-                          ),
+                          columns == 1
+                              ? rowChildren[0]
+                              : IntrinsicHeight(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: rowChildren,
+                                  ),
+                                ),
                         );
                         if (i + columns < widget.services.length) {
                           rows.add(SizedBox(height: spacing));
                         }
                       }
-                      return Column(children: rows);
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: rows,
+                      );
                     },
                   ),
                 ],
@@ -183,15 +197,15 @@ class _ServiceCardState extends State<_ServiceCard> {
           border: Border.all(
             color: _hovered
                 ? AppConstants.primaryColor.withValues(alpha: 0.45)
-                : AppConstants.primaryColor.withValues(alpha: 
-                    widget.isDark ? 0.12 : 0.08,
+                : AppConstants.primaryColor.withValues(
+                    alpha: widget.isDark ? 0.12 : 0.08,
                   ),
             width: _hovered ? 1.5 : 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppConstants.primaryColor.withValues(alpha: 
-                _hovered ? 0.18 : 0.06,
+              color: AppConstants.primaryColor.withValues(
+                alpha: _hovered ? 0.18 : 0.06,
               ),
               blurRadius: _hovered ? 40 : 20,
               offset: const Offset(0, 8),
@@ -210,11 +224,11 @@ class _ServiceCardState extends State<_ServiceCard> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppConstants.primaryColor.withValues(alpha: 
-                        _hovered ? 0.22 : 0.15,
+                      AppConstants.primaryColor.withValues(
+                        alpha: _hovered ? 0.22 : 0.15,
                       ),
-                      AppConstants.secondaryColor.withValues(alpha: 
-                        _hovered ? 0.18 : 0.1,
+                      AppConstants.secondaryColor.withValues(
+                        alpha: _hovered ? 0.18 : 0.1,
                       ),
                     ],
                   ),

@@ -124,6 +124,7 @@ class _SkillsSectionState extends State<SkillsSection>
                       }
                       return Column(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: rows,
                       );
                     },

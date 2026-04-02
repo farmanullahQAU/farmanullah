@@ -23,8 +23,6 @@ class ExperienceSection extends StatefulWidget {
 
 class _ExperienceSectionState extends State<ExperienceSection>
     with SingleTickerProviderStateMixin {
-  late PageController _pageController;
-  int _currentPage = 0;
   late AnimationController _animController;
   late Animation<double> _fadeIn;
   bool _animatedIn = false;
@@ -32,8 +30,6 @@ class _ExperienceSectionState extends State<ExperienceSection>
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-    _pageController.addListener(_pageListener);
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
@@ -41,15 +37,8 @@ class _ExperienceSectionState extends State<ExperienceSection>
     _fadeIn = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
   }
 
-  void _pageListener() {
-    final page = _pageController.page?.round() ?? 0;
-    if (page != _currentPage && mounted) setState(() => _currentPage = page);
-  }
-
   @override
   void dispose() {
-    _pageController.removeListener(_pageListener);
-    _pageController.dispose();
     _animController.dispose();
     super.dispose();
   }
@@ -95,7 +84,7 @@ class _ExperienceSectionState extends State<ExperienceSection>
                   if (isDesktop)
                     _buildTimeline(context, isDark)
                   else
-                    _buildMobileSlider(context, isDark),
+                    _buildMobileList(context, isDark),
                 ],
               ),
             ),
@@ -181,32 +170,19 @@ class _ExperienceSectionState extends State<ExperienceSection>
     );
   }
 
-  Widget _buildMobileSlider(BuildContext context, bool isDark) {
+  Widget _buildMobileList(BuildContext context, bool isDark) {
     return Column(
-      children: [
-        SizedBox(
-          height: 520,
-          child: PageView.builder(
-            controller: _pageController,
-            physics: const BouncingScrollPhysics(),
-            itemCount: widget.experiences.length,
-            itemBuilder: (context, index) => RepaintBoundary(
-              key: ValueKey('exp_$index'),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: _buildExperienceCard(
-                  context,
-                  widget.experiences[index],
-                  false,
-                  isDark,
-                ),
-              ),
-            ),
+      children: List.generate(widget.experiences.length, (index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 24),
+          child: _buildExperienceCard(
+            context,
+            widget.experiences[index],
+            false,
+            isDark,
           ),
-        ),
-        const SizedBox(height: 24),
-        _buildDots(widget.experiences.length),
-      ],
+        );
+      }),
     );
   }
 
@@ -235,124 +211,121 @@ class _ExperienceSectionState extends State<ExperienceSection>
           ),
         ],
       ),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: SpacingConstants.getCardPadding(context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(isDesktop ? 12 : 10),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppConstants.primaryColor.withValues(alpha: 0.15),
-                          AppConstants.accentColor.withValues(alpha: 0.1),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(isDesktop ? 14 : 12),
-                    ),
-                    child: Icon(
-                      Icons.work_outline_rounded,
-                      color: AppConstants.primaryColor,
-                      size: isDesktop ? 22 : 19,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            exp.title,
-                            style: GoogleFonts.inter(
-                              fontSize: isDesktop ? 20 : 16.5,
-                              fontWeight: FontWeight.w800,
-                              color: isDark
-                                  ? AppConstants.darkText
-                                  : AppConstants.lightText,
-                              letterSpacing: -0.4,
-                              height: 1.2,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          exp.company,
-                          style: GoogleFonts.inter(
-                            fontSize: isDesktop ? 14 : 12.5,
-                            fontWeight: FontWeight.w700,
-                            color: AppConstants.primaryColor,
-                            letterSpacing: 0.1,
-                          ),
-                        ),
-                        if (!isDesktop) ...[
-                          const SizedBox(height: 10),
-                          _buildPeriodBadge(exp.period),
-                        ],
+      child: Padding(
+        padding: SpacingConstants.getCardPadding(context),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(isDesktop ? 12 : 10),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppConstants.primaryColor.withValues(alpha: 0.15),
+                        AppConstants.accentColor.withValues(alpha: 0.1),
                       ],
                     ),
+                    borderRadius: BorderRadius.circular(isDesktop ? 14 : 12),
                   ),
-                  if (isDesktop) _buildPeriodBadge(exp.period),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppConstants.primaryColor.withValues(alpha: 0.3),
-                      Colors.transparent,
+                  child: Icon(
+                    Icons.work_outline_rounded,
+                    color: AppConstants.primaryColor,
+                    size: isDesktop ? 22 : 19,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          exp.title,
+                          style: GoogleFonts.inter(
+                            fontSize: isDesktop ? 20 : 16.5,
+                            fontWeight: FontWeight.w800,
+                            color: isDark
+                                ? AppConstants.darkText
+                                : AppConstants.lightText,
+                            letterSpacing: -0.4,
+                            height: 1.2,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        exp.company,
+                        style: GoogleFonts.inter(
+                          fontSize: isDesktop ? 14 : 12.5,
+                          fontWeight: FontWeight.w700,
+                          color: AppConstants.primaryColor,
+                          letterSpacing: 0.1,
+                        ),
+                      ),
+                      if (!isDesktop) ...[
+                        const SizedBox(height: 10),
+                        _buildPeriodBadge(exp.period),
+                      ],
                     ],
                   ),
                 ),
+                if (isDesktop) _buildPeriodBadge(exp.period),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 1,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppConstants.primaryColor.withValues(alpha: 0.3),
+                    Colors.transparent,
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
-              // Responsibilities
-              ...exp.responsibilities
-                  .take(isDesktop ? 5 : 4)
-                  .map(
-                    (r) => Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 6,
-                            height: 6,
-                            margin: const EdgeInsets.only(top: 6, right: 11),
-                            decoration: const BoxDecoration(
-                              color: AppConstants.primaryColor,
-                              shape: BoxShape.circle,
+            ),
+            const SizedBox(height: 20),
+            // Responsibilities
+            ...exp.responsibilities
+                .take(isDesktop ? 5 : 4)
+                .map(
+                  (r) => Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 6,
+                          height: 6,
+                          margin: const EdgeInsets.only(top: 6, right: 11),
+                          decoration: const BoxDecoration(
+                            color: AppConstants.primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            r,
+                            style: GoogleFonts.inter(
+                              fontSize: isDesktop ? 14 : 13,
+                              height: 1.65,
+                              color: isDark
+                                  ? AppConstants.darkTextSecondary
+                                  : AppConstants.lightTextSecondary,
                             ),
                           ),
-                          Expanded(
-                            child: Text(
-                              r,
-                              style: GoogleFonts.inter(
-                                fontSize: isDesktop ? 14 : 13,
-                                height: 1.65,
-                                color: isDark
-                                    ? AppConstants.darkTextSecondary
-                                    : AppConstants.lightTextSecondary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-            ],
-          ),
+                ),
+          ],
         ),
       ),
     );
@@ -373,34 +346,6 @@ class _ExperienceSectionState extends State<ExperienceSection>
           color: AppConstants.primaryColor,
         ),
       ),
-    );
-  }
-
-  Widget _buildDots(int count) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(count, (index) {
-        final isActive = _currentPage == index;
-        return GestureDetector(
-          onTap: () => _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 350),
-            curve: Curves.easeInOutCubic,
-          ),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            width: isActive ? 28 : 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: isActive
-                  ? AppConstants.primaryColor
-                  : AppConstants.primaryColor.withValues(alpha: 0.28),
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
-        );
-      }),
     );
   }
 }
